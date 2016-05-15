@@ -1,0 +1,1 @@
+Capable towers which produces ressources over time
