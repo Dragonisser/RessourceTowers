@@ -1,3 +1,25 @@
-name: Ressource Towers
+name: RessourceTowers
 main: de.prwh.ressourcetowers.main.RTMain
-version: 0.0.1
+version: 0.0.2
+
+commands:
+    addTower:
+      description: This is a demo command.
+      usage: /<command> [player]
+      permission: <plugin name>.basic
+      permission-message: You don't have <permission>
+    listTower:
+      description: This is a demo command.
+      usage: /<command> [player]
+      permission: <plugin name>.basic
+      permission-message: You don't have <permission>
+    removeTower:
+      description: This is a demo command.
+      usage: /<command> [player]
+      permission: <plugin name>.basic
+      permission-message: You don't have <permission>
+    chunkTower:
+      description: This is a demo command.
+      usage: /<command> [player]
+      permission: <plugin name>.basic
+      permission-message: You don't have <permission>
