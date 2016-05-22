@@ -1,55 +1,55 @@
 package de.prwh.ressourcetowers.towers;
 
-import net.minecraft.server.v1_8_R3.Blocks;
-import net.minecraft.server.v1_8_R3.Item;
+import java.io.Serializable;
+
 import net.minecraft.server.v1_8_R3.ItemStack;
 import net.minecraft.server.v1_8_R3.Items;
 
-public class TowerInfo {
-	private ItemStack ressource;
-	private String towername;
+public class TowerInfo implements Serializable {
 
-	public TowerInfo(String towername) {
-		this.setTowername(towername);
-		switch (towername.toUpperCase()) {
-		case "IRON":
-			setRessource(new ItemStack(Item.getItemOf(Blocks.IRON_ORE)));
-			break;
-		case "GOLD":
-			setRessource(new ItemStack(Item.getItemOf(Blocks.GOLD_ORE)));
-			break;
-		case "REDSTONE":
-			setRessource(new ItemStack(Items.REDSTONE, 4));
-			break;
-		case "LAPIS":
-			setRessource(new ItemStack(Items.DYE, 4, 4));
-			break;
-		case "DIAMOND":
-			setRessource(new ItemStack(Items.DIAMOND));
-			break;
-		default:
-			break;
+	public static enum TowerType {
+		IRON("Iron", new ItemStack(Items.IRON_INGOT, 1)), GOLD("Gold", new ItemStack(Items.GOLD_INGOT, 1)), REDSTONE("Redstone",
+				new ItemStack(Items.REDSTONE, 4)), DIAMOND("Diamond", new ItemStack(Items.DIAMOND, 1)), LAPIS("Lapis", new ItemStack(Items.DYE, 4, 4));
+
+		private String towername;
+		private ItemStack ressource;
+
+		public String getTowerName() {
+			return towername  + "-tower";
+		}
+
+		public ItemStack getTowerRessource() {
+			return ressource;
+		}
+
+		private TowerType(String towername, ItemStack ressource) {
+			this.towername = towername;
+			this.ressource = ressource;
 		}
 	}
 
-	public ItemStack getRessource() {
-		return ressource;
+	private static final long serialVersionUID = 2401697897143815705L;
+	private TowerType type;
+
+	public TowerInfo(TowerType type) {
+		this.type = type;
 	}
 
-	private void setRessource(ItemStack ressource) {
-		this.ressource = ressource;
+	public TowerType getType() {
+		return type;
+	}
+
+	public ItemStack getRessource() {
+		return type.getTowerRessource();
 	}
 
 	public String getTowername() {
-		return towername.toUpperCase();
+		return type.getTowerName();
 	}
-
-	private void setTowername(String towername) {
-		this.towername = towername;
-	}
-
+	
 	public String toString() {
-		return towername + " " + ressource;
-
+		return getTowername();
+		
 	}
+
 }

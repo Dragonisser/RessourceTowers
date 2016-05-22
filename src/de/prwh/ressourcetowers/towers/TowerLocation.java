@@ -11,50 +11,54 @@ import java.util.HashMap;
 
 import org.bukkit.Chunk;
 import org.bukkit.Location;
+import org.bukkit.command.CommandSender;
 
 import de.prwh.ressourcetowers.main.RTMain;
 
 public class TowerLocation implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 8216077333009256406L;
-	private static File file = new File("C:/Users/Simon/Desktop/mc/world/data/towerlist.dat");
+	private static File file;
 	private static TowerLocation instance;
-	private HashMap<Location, TowerInfo> map = new HashMap<>();
+
+	private HashMap<SerializableLocation, TowerInfo> map = new HashMap<>();
 
 	private TowerLocation() {
 	}
 
-	public void addTowerLocation(Location loc, TowerInfo tower) {
+	public HashMap<SerializableLocation, TowerInfo> getMap() {
+		return map;
+	}
+
+	public void addTowerLocation(SerializableLocation loc, TowerInfo tower) {
 		map.put(loc, tower);
 	}
 
 	public void removeTowerLocation(Location loc) {
-		map.remove(loc);
+		map.remove(new SerializableLocation(loc));
 	}
 
-	public Location getTowerLocations() {
-		for (Location locM : map.keySet()) {
+	public SerializableLocation getTowerLocations() {
+		for (SerializableLocation locM : map.keySet()) {
 			return locM;
 		}
 		return null;
 	}
 
-	public void listTowerLocations() {
-		System.out.println(map.keySet());
+	public void listTowerLocations(CommandSender sender) {
+		sender.sendMessage(map.entrySet().toString());
 	}
 
 	public TowerInfo getTowerInfo(Location loc) {
 		if (locationContainsTower(loc))
-			return map.get(loc);
+			return map.get(new SerializableLocation(loc));
 		return null;
 	}
 
 	public boolean locationContainsTower(Location loc) {
-		if (map.containsKey(loc))
+		if (map.containsKey(new SerializableLocation(loc))) {
 			return true;
+		}
 		return false;
 	}
 
@@ -63,26 +67,30 @@ public class TowerLocation implements Serializable {
 			return false;
 		Chunk chunk = loc.getChunk();
 
-		for (Location locM : map.keySet()) {
-			if (chunk.equals(locM.getChunk())) {
+		for (SerializableLocation locM : map.keySet()) {
+			if (chunk.equals(locM.toLocation().getChunk())) {
 				return true;
 			}
 		}
 		return false;
 	}
 
-	public Location getTowerInChunk(Location loc) {
+	public SerializableLocation getTowerInChunk(Location loc) {
 
 		if (chunkContainsTower(loc)) {
 			Chunk chunk = loc.getChunk();
 
-			for (Location locM : map.keySet()) {
-				if (chunk == locM.getChunk()) {
+			for (SerializableLocation locM : map.keySet()) {
+				if (chunk == locM.toLocation().getChunk()) {
 					return locM;
 				}
 			}
 		}
 		return null;
+	}
+
+	public void removeAllTowers() {
+		map.clear();
 	}
 
 	public static TowerLocation getInstance() {
@@ -95,22 +103,19 @@ public class TowerLocation implements Serializable {
 		RTMain.getLoggerMain().info("[RessourceTowers] Trying to save the tower list");
 
 		try {
-
-			if (!file.exists())
-				file.createNewFile();
-
 			try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))) {
 				oos.writeObject(map);
+				RTMain.getLoggerMain().info("[RessourceTowers] Towerlist saved successfully");
 			}
 		} catch (IOException e) {
-			throw new RuntimeException("[RessourceTowers] Could not save towerlist to file", e);
+			RTMain.getLoggerMain().info("[RessourceTowers]Could not save towerlist to file", e);
 		}
 
 	}
 
+	@SuppressWarnings("unchecked")
 	public void loadTowerList() {
 		RTMain.getLoggerMain().info("[RessourceTowers] Trying to load the tower list");
-
 		if (file == null || !file.exists())
 			try {
 				file.createNewFile();
@@ -120,9 +125,20 @@ public class TowerLocation implements Serializable {
 			}
 
 		try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
-			map = (HashMap<Location, TowerInfo>) ois.readObject();
+			map = (HashMap<SerializableLocation, TowerInfo>) ois.readObject();
+			RTMain.getLoggerMain().info("[RessourceTowers] Towerlist loaded successfully");
+			RTMain.getLoggerMain().info("[RessourceTowers] Loaded " + map.size() + " towers");
 		} catch (IOException | ClassNotFoundException | ClassCastException e) {
-			throw new RuntimeException("[RessourceTowers] Could not load towerlist from file", e);
+			RTMain.getLoggerMain().info("[RessourceTowers] Could not load towerlist from file", e);
+		}
+	}
+
+	public void setFilePath(String path) {
+
+		try {
+			file = new File(path + "/towerlist.dat");
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 }
