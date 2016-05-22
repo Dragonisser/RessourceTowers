@@ -38,7 +38,7 @@ public class RTMain extends JavaPlugin {
 
 	public void onEnable() {
 		
-		if (getServer().getPluginManager().getPlugin("Factions") == null && getServer().getPluginManager().getPlugin("MassiveCore") == null) {
+		if (getServer().getPluginManager().getPlugin("Factions") == null || getServer().getPluginManager().getPlugin("MassiveCore") == null) {
 			RTMain.getLoggerMain().info("[RessourceTowers] Plugin MassiveCore and Factions are Missing. Disabling RessourceTowers!");
 			getServer().getPluginManager().disablePlugin(this);
 		}	
