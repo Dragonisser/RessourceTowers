@@ -108,7 +108,7 @@ public class TowerLocation implements Serializable {
 				RTMain.getLoggerMain().info("[RessourceTowers] Towerlist saved successfully");
 			}
 		} catch (IOException e) {
-			RTMain.getLoggerMain().info("[RessourceTowers]Could not save towerlist to file", e);
+			RTMain.getLoggerMain().info("[RessourceTowers] Could not save towerlist to file", e);
 		}
 
 	}

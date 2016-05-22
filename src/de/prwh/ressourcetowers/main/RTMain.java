@@ -3,8 +3,6 @@ package de.prwh.ressourcetowers.main;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,9 +16,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
+import com.massivecraft.factions.entity.BoardColl;
 import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.FactionColl;
-import com.massivecraft.factions.entity.MPlayer;
 import com.massivecraft.massivecore.ps.PS;
 
 import de.prwh.ressourcetowers.events.EventListenerHandler;
@@ -39,6 +37,11 @@ public class RTMain extends JavaPlugin {
 	private static final Logger log = LogManager.getLogger(PLUGINID.toUpperCase());
 
 	public void onEnable() {
+		
+		if (getServer().getPluginManager().getPlugin("Factions") == null && getServer().getPluginManager().getPlugin("MassiveCore") == null) {
+			RTMain.getLoggerMain().info("[RessourceTowers] Plugin MassiveCore and Factions are Missing. Disabling RessourceTowers!");
+			getServer().getPluginManager().disablePlugin(this);
+		}	
 
 		if (!getDataFolder().exists()) {
 			getDataFolder().mkdir();
@@ -165,12 +168,10 @@ public class RTMain extends JavaPlugin {
 						/*
 						 * Unclaim faction chunk with tower in it
 						 */
-						MPlayer fPlayer = MPlayer.get(player);
 						Faction faction = FactionColl.get().getNone();
 
 						PS chunk = PS.valueOf(loc);
-						Set<PS> chunks = Collections.singleton(chunk);
-						fPlayer.tryClaim(faction, chunks);
+						BoardColl.get().setFactionAt(chunk, faction);
 
 					} else {
 						sender.sendMessage(ChatColor.RED + "[RessourceTowers]" + ChatColor.WHITE + " Location x:" + loc.getBlockX() + " y:" + loc.getBlockY()
@@ -187,12 +188,10 @@ public class RTMain extends JavaPlugin {
 					 * Unclaim faction chunk with tower in it
 					 */
 					for (SerializableLocation loc : tlh.getMap().keySet()) {
-						MPlayer fPlayer = MPlayer.get(player);
 						Faction faction = FactionColl.get().getNone();
 
 						PS chunk = PS.valueOf(loc.toLocation());
-						Set<PS> chunks = Collections.singleton(chunk);
-						fPlayer.tryClaim(faction, chunks);
+						BoardColl.get().setFactionAt(chunk, faction);
 					}
 					tlh.removeAllTowers();
 
@@ -200,6 +199,8 @@ public class RTMain extends JavaPlugin {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
+			} else {
+				sender.sendMessage(ChatColor.RED + "[RessourceTowers]" + ChatColor.WHITE + " /removetower , /removetower all");
 			}
 		}
 		return false;
