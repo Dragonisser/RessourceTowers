@@ -3,9 +3,9 @@ package de.prwh.ressourcetowers.main;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -30,18 +30,21 @@ import de.prwh.ressourcetowers.towers.TowerLocation;
 public class RTMain extends JavaPlugin {
 
 	BukkitScheduler autoSave = getServer().getScheduler();
+	BukkitScheduler oreSpawn = getServer().getScheduler();
 	private File config_file;
 	private FileConfiguration config;
 	TowerLocation tlh = TowerLocation.getInstance();
 	public static final String PLUGINID = "ressourcetowers";
-	private static final Logger log = LogManager.getLogger(PLUGINID.toUpperCase());
+	private static final Logger log = LogManager.getLogManager().getLogger(PLUGINID.toUpperCase());
 
 	public void onEnable() {
-		
+
 		if (getServer().getPluginManager().getPlugin("Factions") == null || getServer().getPluginManager().getPlugin("MassiveCore") == null) {
-			RTMain.getLoggerMain().info("[RessourceTowers] Plugin MassiveCore and Factions are Missing. Disabling RessourceTowers!");
+			getServer().getConsoleSender()
+					.sendMessage(ChatColor.RED + "[RessourceTowers] Plugin MassiveCore and Factions are Missing. Disabling RessourceTowers!");
 			getServer().getPluginManager().disablePlugin(this);
-		}	
+			return;
+		}
 
 		if (!getDataFolder().exists()) {
 			getDataFolder().mkdir();
@@ -56,8 +59,9 @@ public class RTMain extends JavaPlugin {
 		}
 
 		config = YamlConfiguration.loadConfiguration(config_file);
-		config.addDefault("#How many minutes until the towerlist gets autosaved", null);
-		config.addDefault("autoSaveTime", 5);
+		config.addDefault("autoSaveTime", 10);
+		config.addDefault("oreSpawnTime", 5);
+		config.addDefault("hardMode", false);
 		config.options().copyDefaults(true);
 
 		try {
@@ -70,6 +74,7 @@ public class RTMain extends JavaPlugin {
 		tlh.setFilePath(getDataFolder().getAbsolutePath());
 		tlh.loadTowerList();
 		startAutoSave();
+		startOreSpawn();
 
 	}
 
@@ -84,9 +89,22 @@ public class RTMain extends JavaPlugin {
 
 	}
 
+	private void startOreSpawn() {
+		int time = config.getBoolean("hardMode") ? 1 : 5;
+		
+		autoSave.scheduleSyncRepeatingTask(this, new Runnable() {
+
+			@Override
+			public void run() {
+				if (!tlh.getMap().isEmpty())
+					tlh.spawnOres();
+			}
+		}, 0, (config.getInt("oreSpawnTime") * 60 * 20) / time);
+
+	}
+
 	public void onDisable() {
 		tlh.saveTowerList();
-
 	}
 
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {

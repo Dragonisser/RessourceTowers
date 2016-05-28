@@ -2,27 +2,26 @@ package de.prwh.ressourcetowers.towers;
 
 import java.io.Serializable;
 
-import net.minecraft.server.v1_8_R3.ItemStack;
-import net.minecraft.server.v1_8_R3.Items;
+import org.bukkit.Material;
 
 public class TowerInfo implements Serializable {
 
 	public static enum TowerType {
-		IRON("Iron", new ItemStack(Items.IRON_INGOT, 1)), GOLD("Gold", new ItemStack(Items.GOLD_INGOT, 1)), REDSTONE("Redstone",
-				new ItemStack(Items.REDSTONE, 4)), DIAMOND("Diamond", new ItemStack(Items.DIAMOND, 1)), LAPIS("Lapis", new ItemStack(Items.DYE, 4, 4));
+		IRON("Iron", Material.IRON_ORE), GOLD("Gold", Material.GOLD_ORE), REDSTONE("Redstone", Material.REDSTONE_ORE), DIAMOND("Diamond",
+				Material.DIAMOND_ORE), LAPIS("Lapis", Material.LAPIS_ORE);
 
 		private String towername;
-		private ItemStack ressource;
+		private Material ressource;
 
 		public String getTowerName() {
-			return towername  + "-tower";
+			return towername + "-tower";
 		}
 
-		public ItemStack getTowerRessource() {
+		public Material getTowerRessource() {
 			return ressource;
 		}
 
-		private TowerType(String towername, ItemStack ressource) {
+		private TowerType(String towername, Material ressource) {
 			this.towername = towername;
 			this.ressource = ressource;
 		}
@@ -39,17 +38,17 @@ public class TowerInfo implements Serializable {
 		return type;
 	}
 
-	public ItemStack getRessource() {
+	public Material getRessource() {
 		return type.getTowerRessource();
 	}
 
 	public String getTowername() {
 		return type.getTowerName();
 	}
-	
+
 	public String toString() {
 		return getTowername();
-		
+
 	}
 
 }

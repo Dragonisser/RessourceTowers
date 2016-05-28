@@ -8,10 +8,19 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.Random;
+import java.util.logging.Level;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
+
+import com.massivecraft.factions.entity.BoardColl;
+import com.massivecraft.factions.entity.Faction;
+import com.massivecraft.factions.entity.FactionColl;
+import com.massivecraft.massivecore.ps.PS;
 
 import de.prwh.ressourcetowers.main.RTMain;
 
@@ -100,22 +109,25 @@ public class TowerLocation implements Serializable {
 	}
 
 	public void saveTowerList() {
-		RTMain.getLoggerMain().info("[RessourceTowers] Trying to save the tower list");
+		RTMain.getPlugin(RTMain.class).getServer().getConsoleSender()
+				.sendMessage(ChatColor.RED + "[RessourceTowers] " + ChatColor.GREEN + "Trying to save the tower list");
 
 		try {
 			try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))) {
 				oos.writeObject(map);
-				RTMain.getLoggerMain().info("[RessourceTowers] Towerlist saved successfully");
+				RTMain.getPlugin(RTMain.class).getServer().getConsoleSender()
+						.sendMessage(ChatColor.RED + "[RessourceTowers] " + ChatColor.GREEN + "Towerlist saved successfully");
 			}
 		} catch (IOException e) {
-			RTMain.getLoggerMain().info("[RessourceTowers] Could not save towerlist to file", e);
+			RTMain.getLoggerMain().log(Level.SEVERE, "[RessourceTowers] Could not save towerlist to file", e);
 		}
 
 	}
 
 	@SuppressWarnings("unchecked")
 	public void loadTowerList() {
-		RTMain.getLoggerMain().info("[RessourceTowers] Trying to load the tower list");
+		RTMain.getPlugin(RTMain.class).getServer().getConsoleSender()
+				.sendMessage(ChatColor.RED + "[RessourceTowers] " + ChatColor.GREEN + "Trying to load the tower list");
 		if (file == null || !file.exists())
 			try {
 				file.createNewFile();
@@ -126,10 +138,13 @@ public class TowerLocation implements Serializable {
 
 		try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
 			map = (HashMap<SerializableLocation, TowerInfo>) ois.readObject();
-			RTMain.getLoggerMain().info("[RessourceTowers] Towerlist loaded successfully");
-			RTMain.getLoggerMain().info("[RessourceTowers] Loaded " + map.size() + " towers");
+			String nominator = map.size() == 1 ? " tower" : " towers";
+			RTMain.getPlugin(RTMain.class).getServer().getConsoleSender()
+					.sendMessage(ChatColor.RED + "[RessourceTowers] " + ChatColor.GREEN + "Towerlist loaded successfully");
+			RTMain.getPlugin(RTMain.class).getServer().getConsoleSender()
+					.sendMessage(ChatColor.RED + "[RessourceTowers] " + ChatColor.GREEN + "Loaded " + map.size() + nominator);
 		} catch (IOException | ClassNotFoundException | ClassCastException e) {
-			RTMain.getLoggerMain().info("[RessourceTowers] Could not load towerlist from file", e);
+			RTMain.getLoggerMain().log(Level.SEVERE, "[RessourceTowers] Could not load towerlist to file", e);
 		}
 	}
 
@@ -139,6 +154,47 @@ public class TowerLocation implements Serializable {
 			file = new File(path + "/towerlist.dat");
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+	public void spawnOres() {
+		int xMin, xMax;
+		int zMin, zMax;
+		Location loc;
+		TowerInfo info;
+		Material stack;
+		Random rand = new Random();
+
+		for (SerializableLocation sLoc : map.keySet()) {
+
+			PS chunk_tower = PS.valueOf(sLoc.toLocation().getChunk());
+			Faction faction_tower = BoardColl.get().getFactionAt(chunk_tower);
+			if (faction_tower.equals(FactionColl.get().getNone()))
+				return;
+
+			loc = sLoc.toLocation();
+			info = getTowerInfo(loc);
+			stack = info.getRessource();
+			xMin = loc.getBlockX() - 1;
+			xMax = loc.getBlockX() + 1;
+			zMin = loc.getBlockZ() - 1;
+			zMax = loc.getBlockZ() + 1;
+
+			while (true) {
+				if (!loc.subtract(0, 1, 0).getBlock().getType().equals(Material.SMOOTH_BRICK))
+					break;
+			}
+
+			int x = xMin + rand.nextInt(xMax - xMin + 1);
+			int z = zMin + rand.nextInt(zMax - zMin + 1);
+			if (x == loc.getBlockX() && z == loc.getBlockZ())
+				return;
+
+			loc.setX(x);
+			loc.setZ(z);
+			loc.setY(loc.getBlockY() + 1);
+
+			loc.getBlock().setType(stack);
 		}
 	}
 }
