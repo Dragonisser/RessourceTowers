@@ -90,8 +90,8 @@ public class RTMain extends JavaPlugin {
 	}
 
 	private void startOreSpawn() {
-		int time = config.getBoolean("hardMode") ? 1 : 5;
-		
+		int time = config.getBoolean("hardMode") ? 5 : 1;
+
 		autoSave.scheduleSyncRepeatingTask(this, new Runnable() {
 
 			@Override
@@ -146,10 +146,10 @@ public class RTMain extends JavaPlugin {
 						tLoc.addTowerLocation(new SerializableLocation(loc), new TowerInfo(type));
 						sender.sendMessage(ChatColor.RED + "[RessourceTowers] " + ChatColor.WHITE + type.getTowerName() + " at x:" + loc.getBlockX() + " y:"
 								+ loc.getBlockY() + " z:" + loc.getBlockZ() + " has been added");
-						return true;
 					} else {
 						sender.sendMessage(ChatColor.RED + "[RessourceTowers]" + ChatColor.WHITE + " Chunk already contains a tower ");
 					}
+					return true;
 
 				} catch (Exception e) {
 
@@ -171,6 +171,7 @@ public class RTMain extends JavaPlugin {
 			} else {
 				sender.sendMessage(ChatColor.RED + "[RessourceTowers]" + ChatColor.WHITE + " Chunk does not contain a tower");
 			}
+			return true;
 
 		} else if (cmd.getName().equalsIgnoreCase("removeTower")) {
 			if (args.length == 0) {
@@ -214,6 +215,7 @@ public class RTMain extends JavaPlugin {
 					tlh.removeAllTowers();
 
 					sender.sendMessage(ChatColor.RED + "[RessourceTowers]" + ChatColor.WHITE + " All towers have been removed");
+					return true;
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

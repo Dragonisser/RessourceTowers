@@ -4,22 +4,21 @@ version: 0.0.4
 
 commands:
     addTower:
-      description: This is a demo command.
+      description: Adds the tower on your location/coordinates with the given TowerType.
       usage: /<command> [towertype]
-      permission: <plugin name>.basic
-      permission-message: You don't have <permission>
+      permission: ressourcetowers.addtower
+      permission-message: You don't have the permissions <permission>
     listTower:
-      description: This is a demo command.
+      description: Lists all towers.
       usage: /<command>
-      permission: <plugin name>.basic
-      permission-message: You don't have <permission>
+      permission: ressourcetowers.listtower
+      permission-message: You don't have the permissions <permission>
     removeTower:
-      description: This is a demo command.
-      usage: /<command> [player]
-      permission: <plugin name>.basic
-      permission-message: You don't have <permission>
+      description: Removes the tower at your location or all.
+      permission: ressourcetowers.removetower
+      permission-message: You don't have the permissions <permission>
     chunkTower:
-      description: This is a demo command.
+      description: Cheks if a tower is in the chunk you are standing.
       usage: /<command>
-      permission: <plugin name>.basic
-      permission-message: You don't have <permission>
+      permission: ressourcetowers.chunktower
+      permission-message: You don't have the permissions <permission>
