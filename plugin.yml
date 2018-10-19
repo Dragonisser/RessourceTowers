@@ -1,8 +1,14 @@
 name: RessourceTowers
 main: de.prwh.ressourcetowers.main.RTMain
-version: 0.0.4
+version: 0.0.5
+api-version: 1.12
 
 commands:
+    rt:
+      description: basic stuff.
+      usage: /<command>
+      permission: ressourcetowers
+      permission-message: You don't have the permissions <permission>
     addTower:
       description: Adds the tower on your location/coordinates with the given TowerType.
       usage: /<command> [towertype]
@@ -18,7 +24,7 @@ commands:
       permission: ressourcetowers.removetower
       permission-message: You don't have the permissions <permission>
     chunkTower:
-      description: Cheks if a tower is in the chunk you are standing.
+      description: Checks if a tower is in the chunk you are standing.
       usage: /<command>
       permission: ressourcetowers.chunktower
       permission-message: You don't have the permissions <permission>

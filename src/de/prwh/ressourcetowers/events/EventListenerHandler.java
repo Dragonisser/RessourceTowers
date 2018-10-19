@@ -47,12 +47,12 @@ public class EventListenerHandler implements Listener {
 					} else {
 						if (BoardColl.get().getFactionAt(chunk_tower).equals(faction_none)) {
 							event.getPlayer().sendMessage(ChatColor.RED + "[RessourceTowers]" + ChatColor.WHITE + " Tower has been captured");
-							Bukkit.broadcastMessage(ChatColor.RED + "[RessourceTowers] " + ChatColor.GREEN + " Faction " + faction.getName() + ChatColor.WHITE
+							Bukkit.broadcastMessage(ChatColor.RED + "[RessourceTowers]" + ChatColor.GREEN + " Faction '" + faction.getName() + "'" + ChatColor.WHITE
 									+ " has captured an " + TowerLocation.getInstance().getTowerInfo(loc.toLocation()).getTowername());
 						} else {
 							event.getPlayer().sendMessage(ChatColor.RED + "[RessourceTowers]" + ChatColor.WHITE + " You have stolen a tower from the Faction "
 									+ ChatColor.GREEN + faction_tower.getName());
-							Bukkit.broadcastMessage(ChatColor.RED + "[RessourceTowers]" + ChatColor.GREEN + " Faction " + faction.getName() + ChatColor.WHITE
+							Bukkit.broadcastMessage(ChatColor.RED + "[RessourceTowers]" + ChatColor.GREEN + " Faction '" + faction.getName() + "'" + ChatColor.WHITE
 									+ " has stolen an " + TowerLocation.getInstance().getTowerInfo(loc.toLocation()).getTowername() + " from " + ChatColor.GREEN
 									+ " Faction " + faction_tower.getName());
 						}
