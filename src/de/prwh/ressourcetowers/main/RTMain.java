@@ -74,7 +74,9 @@ public class RTMain extends JavaPlugin {
 	}
 
 	public void onDisable() {
-		tlh.saveTowerList();
+		if (getServer().getPluginManager().getPlugin("Factions") != null || getServer().getPluginManager().getPlugin("MassiveCore") != null) {
+			tlh.saveTowerList();
+		}
 	}
 
 	public static Logger getLoggerMain() {

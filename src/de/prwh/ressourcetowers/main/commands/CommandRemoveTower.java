@@ -27,7 +27,6 @@ public class CommandRemoveTower implements CommandExecutor {
 
 		if (cmd.getName().equalsIgnoreCase("removeTower")) {
 			if (args.length == 0) {
-				sender.sendMessage(ChatColor.RED + "[RessourceTowers]" + ChatColor.WHITE + " Trying to remove tower");
 
 				Location loc = player.getLocation().add(0, -1, 0).getBlock().getLocation();
 				try {

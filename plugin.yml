@@ -14,17 +14,21 @@ commands:
       usage: /<command> [towertype]
       permission: ressourcetowers.addtower
       permission-message: You don't have the permissions <permission>
+      aliases: [addT]
     listTower:
       description: Lists all towers.
       usage: /<command>
       permission: ressourcetowers.listtower
       permission-message: You don't have the permissions <permission>
+      aliases: [listT]
     removeTower:
       description: Removes the tower at your location or all.
       permission: ressourcetowers.removetower
       permission-message: You don't have the permissions <permission>
+      aliases: [remT]
     chunkTower:
       description: Checks if a tower is in the chunk you are standing.
       usage: /<command>
       permission: ressourcetowers.chunktower
       permission-message: You don't have the permissions <permission>
+      aliases: [chunkT]

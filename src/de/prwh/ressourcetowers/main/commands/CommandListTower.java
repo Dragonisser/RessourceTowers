@@ -14,6 +14,7 @@ public class CommandListTower implements CommandExecutor {
 		
 		if (cmd.getName().equalsIgnoreCase("listTower")) {
 			tLoc.listTowerLocations(sender);
+			return true;
 		}
 		return false;
 	}

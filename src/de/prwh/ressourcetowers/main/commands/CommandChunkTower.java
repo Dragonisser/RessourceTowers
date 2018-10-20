@@ -22,7 +22,7 @@ public class CommandChunkTower implements CommandExecutor {
 		if (cmd.getName().equalsIgnoreCase("chunkTower")) {
 			Location loc = (Location) player.getLocation();
 			if (tLoc.chunkContainsTower(loc)) {
-				sender.sendMessage(tLoc.getTowerInChunk(loc).toString());
+				sender.sendMessage(ChatColor.RED + "[RessourceTowers]" + ChatColor.WHITE + " " + tLoc.getTowerInChunk(loc).toString());
 				sender.sendMessage(ChatColor.RED + "[RessourceTowers]" + ChatColor.WHITE + " Chunk does contain a tower");
 			} else {
 				sender.sendMessage(ChatColor.RED + "[RessourceTowers]" + ChatColor.WHITE + " Chunk does not contain a tower");
@@ -31,5 +31,4 @@ public class CommandChunkTower implements CommandExecutor {
 		}
 		return false;
 	}
-
 }

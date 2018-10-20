@@ -55,7 +55,7 @@ public class TowerLocation implements Serializable {
 	}
 
 	public void listTowerLocations(CommandSender sender) {
-		sender.sendMessage(map.entrySet().toString());
+		sender.sendMessage(ChatColor.RED + "[RessourceTowers] " + ChatColor.WHITE + map.entrySet().toString());
 	}
 
 	public TowerInfo getTowerInfo(Location loc) {
@@ -113,6 +113,9 @@ public class TowerLocation implements Serializable {
 				.sendMessage(ChatColor.RED + "[RessourceTowers] " + ChatColor.GREEN + "Trying to save the tower list");
 
 		try {
+			if (file == null || !file.exists()) {
+				
+			}
 			try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))) {
 				oos.writeObject(map);
 				RTMain.getPlugin(RTMain.class).getServer().getConsoleSender()
