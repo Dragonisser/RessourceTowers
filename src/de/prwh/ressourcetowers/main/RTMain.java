@@ -12,7 +12,9 @@ import de.prwh.ressourcetowers.main.commands.CommandAddTower;
 import de.prwh.ressourcetowers.main.commands.CommandChunkTower;
 import de.prwh.ressourcetowers.main.commands.CommandInfo;
 import de.prwh.ressourcetowers.main.commands.CommandListTower;
+import de.prwh.ressourcetowers.main.commands.CommandReloadTowerConfig;
 import de.prwh.ressourcetowers.main.commands.CommandRemoveTower;
+import de.prwh.ressourcetowers.main.commands.CommandSaveTowerList;
 import de.prwh.ressourcetowers.towers.TowerLocation;
 
 public class RTMain extends JavaPlugin {
@@ -45,7 +47,8 @@ public class RTMain extends JavaPlugin {
 		getCommand("listTower").setExecutor(new CommandListTower());
 		getCommand("removeTower").setExecutor(new CommandRemoveTower());
 		getCommand("chunkTower").setExecutor(new CommandChunkTower());
-
+		getCommand("saveTowerList").setExecutor(new CommandSaveTowerList());
+		getCommand("reloadTowerConfig").setExecutor(new CommandReloadTowerConfig(this, cfg));
 	}
 
 	private void startAutoSave() {
@@ -56,21 +59,30 @@ public class RTMain extends JavaPlugin {
 				tlh.saveTowerList();
 			}
 		}, 0, cfg.getConfig().getInt("autoSaveTime") * 60 * 20);
-
 	}
 
 	private void startOreSpawn() {
 		int time = cfg.getConfig().getBoolean("hardMode") ? 5 : 1;
 
-		autoSave.scheduleSyncRepeatingTask(this, new Runnable() {
+		oreSpawn.scheduleSyncRepeatingTask(this, new Runnable() {
 
 			@Override
 			public void run() {
 				if (!tlh.getMap().isEmpty())
 					tlh.spawnOres();
 			}
-		}, 0, (cfg.getConfig().getInt("oreSpawnTime") * 60 * 20) / time);
-
+		}, 0, (cfg.getConfig().getInt("oreSpawnTime") * 60 * 20) * time);
+	}
+	
+	public void restartScheduler() {
+		
+		oreSpawn.cancelAllTasks();
+		autoSave.cancelAllTasks();
+		
+		cfg.getConfig();
+		
+		startAutoSave();
+		startOreSpawn();
 	}
 
 	public void onDisable() {

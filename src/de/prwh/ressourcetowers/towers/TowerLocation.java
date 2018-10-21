@@ -17,10 +17,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 
-import com.massivecraft.factions.entity.BoardColl;
-import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.FactionColl;
-import com.massivecraft.massivecore.ps.PS;
 
 import de.prwh.ressourcetowers.main.RTMain;
 
@@ -40,6 +37,11 @@ public class TowerLocation implements Serializable {
 	}
 
 	public void addTowerLocation(SerializableLocation loc, TowerInfo tower) {
+		map.put(loc, tower);
+	}
+
+	public void updateTowerLocation(SerializableLocation loc, TowerInfo tower) {
+		map.remove(loc);
 		map.put(loc, tower);
 	}
 
@@ -109,17 +111,15 @@ public class TowerLocation implements Serializable {
 	}
 
 	public void saveTowerList() {
-		RTMain.getPlugin(RTMain.class).getServer().getConsoleSender()
-				.sendMessage(ChatColor.RED + "[RessourceTowers] " + ChatColor.GREEN + "Trying to save the tower list");
+		RTMain.getPlugin(RTMain.class).getServer().getConsoleSender().sendMessage(ChatColor.RED + "[RessourceTowers] " + ChatColor.GREEN + "Trying to save the tower list");
 
 		try {
 			if (file == null || !file.exists()) {
-				
+
 			}
 			try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))) {
 				oos.writeObject(map);
-				RTMain.getPlugin(RTMain.class).getServer().getConsoleSender()
-						.sendMessage(ChatColor.RED + "[RessourceTowers] " + ChatColor.GREEN + "Towerlist saved successfully");
+				RTMain.getPlugin(RTMain.class).getServer().getConsoleSender().sendMessage(ChatColor.RED + "[RessourceTowers] " + ChatColor.GREEN + "Towerlist saved successfully");
 			}
 		} catch (IOException e) {
 			RTMain.getLoggerMain().log(Level.SEVERE, "[RessourceTowers] Could not save towerlist to file", e);
@@ -129,8 +129,7 @@ public class TowerLocation implements Serializable {
 
 	@SuppressWarnings("unchecked")
 	public void loadTowerList() {
-		RTMain.getPlugin(RTMain.class).getServer().getConsoleSender()
-				.sendMessage(ChatColor.RED + "[RessourceTowers] " + ChatColor.GREEN + "Trying to load the tower list");
+		RTMain.getPlugin(RTMain.class).getServer().getConsoleSender().sendMessage(ChatColor.RED + "[RessourceTowers] " + ChatColor.GREEN + "Trying to load the tower list");
 		if (file == null || !file.exists())
 			try {
 				file.createNewFile();
@@ -142,10 +141,8 @@ public class TowerLocation implements Serializable {
 		try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
 			map = (HashMap<SerializableLocation, TowerInfo>) ois.readObject();
 			String nominator = map.size() == 1 ? " tower" : " towers";
-			RTMain.getPlugin(RTMain.class).getServer().getConsoleSender()
-					.sendMessage(ChatColor.RED + "[RessourceTowers] " + ChatColor.GREEN + "Towerlist loaded successfully");
-			RTMain.getPlugin(RTMain.class).getServer().getConsoleSender()
-					.sendMessage(ChatColor.RED + "[RessourceTowers] " + ChatColor.GREEN + "Loaded " + map.size() + nominator);
+			RTMain.getPlugin(RTMain.class).getServer().getConsoleSender().sendMessage(ChatColor.RED + "[RessourceTowers] " + ChatColor.GREEN + "Towerlist loaded successfully");
+			RTMain.getPlugin(RTMain.class).getServer().getConsoleSender().sendMessage(ChatColor.RED + "[RessourceTowers] " + ChatColor.GREEN + "Loaded " + map.size() + nominator);
 		} catch (IOException | ClassNotFoundException | ClassCastException e) {
 			RTMain.getLoggerMain().log(Level.SEVERE, "[RessourceTowers] Could not load towerlist to file", e);
 		}
@@ -170,13 +167,13 @@ public class TowerLocation implements Serializable {
 
 		for (SerializableLocation sLoc : map.keySet()) {
 
-			PS chunk_tower = PS.valueOf(sLoc.toLocation().getChunk());
-			Faction faction_tower = BoardColl.get().getFactionAt(chunk_tower);
-			if (faction_tower.equals(FactionColl.get().getNone()))
+			info = getTowerInfo(sLoc.toLocation());
+
+			if (info.getOwnerFaction().equals(FactionColl.get().getNone()))
 				return;
 
 			loc = sLoc.toLocation();
-			info = getTowerInfo(loc);
+
 			stack = info.getRessource();
 			xMin = loc.getBlockX() - 1;
 			xMax = loc.getBlockX() + 1;

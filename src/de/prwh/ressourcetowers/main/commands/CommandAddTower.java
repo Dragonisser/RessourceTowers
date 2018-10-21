@@ -9,6 +9,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import com.massivecraft.factions.entity.FactionColl;
+
 import de.prwh.ressourcetowers.towers.SerializableLocation;
 import de.prwh.ressourcetowers.towers.TowerInfo;
 import de.prwh.ressourcetowers.towers.TowerInfo.TowerType;
@@ -20,6 +22,7 @@ public class CommandAddTower implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		Player player = null;
 		TowerLocation tLoc = TowerLocation.getInstance();
+
 		if (sender instanceof Player) {
 			player = (Player) sender;
 		}
@@ -49,23 +52,22 @@ public class CommandAddTower implements CommandExecutor {
 					case "LAPIS":
 						type = TowerType.LAPIS;
 						break;
+					default:
+						sender.sendMessage(ChatColor.RED + "[RessourceTowers]" + ChatColor.WHITE + " Invalid TowerType: " + Arrays.asList(TowerType.values()));
 					}
 
 					if (!tLoc.chunkContainsTower(loc)) {
-						tLoc.addTowerLocation(new SerializableLocation(loc), new TowerInfo(type));
-						sender.sendMessage(ChatColor.RED + "[RessourceTowers] " + ChatColor.WHITE + type.getTowerName() + " at x:" + loc.getBlockX() + " y:"
-								+ loc.getBlockY() + " z:" + loc.getBlockZ() + " has been added");
+						tLoc.addTowerLocation(new SerializableLocation(loc), new TowerInfo(type, FactionColl.get().getNone().getName()));
+						sender.sendMessage(ChatColor.RED + "[RessourceTowers] " + ChatColor.WHITE + type.getTowerName() + " at x:" + loc.getBlockX() + " y:" + loc.getBlockY() + " z:" + loc.getBlockZ()
+								+ " has been added");
 					} else {
 						sender.sendMessage(ChatColor.RED + "[RessourceTowers]" + ChatColor.WHITE + " Chunk already contains a tower ");
 					}
 					return true;
 
 				} catch (Exception e) {
-
-					sender.sendMessage(ChatColor.RED + "[RessourceTowers]" + ChatColor.WHITE + " Invalid TowerType: " + Arrays.asList(TowerType.values()));
 					e.printStackTrace();
 				}
-
 			} else {
 				sender.sendMessage(ChatColor.RED + "[RessourceTowers]" + ChatColor.WHITE + " Missing argument TowerType");
 			}

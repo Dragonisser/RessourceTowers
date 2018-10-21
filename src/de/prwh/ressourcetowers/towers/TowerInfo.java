@@ -4,11 +4,13 @@ import java.io.Serializable;
 
 import org.bukkit.Material;
 
+import com.massivecraft.factions.entity.Faction;
+import com.massivecraft.factions.entity.FactionColl;
+
 public class TowerInfo implements Serializable {
 
 	public static enum TowerType {
-		IRON("Iron", Material.IRON_ORE), GOLD("Gold", Material.GOLD_ORE), REDSTONE("Redstone", Material.REDSTONE_ORE), DIAMOND("Diamond",
-				Material.DIAMOND_ORE), LAPIS("Lapis", Material.LAPIS_ORE);
+		IRON("Iron", Material.IRON_ORE), GOLD("Gold", Material.GOLD_ORE), REDSTONE("Redstone", Material.REDSTONE_ORE), DIAMOND("Diamond", Material.DIAMOND_ORE), LAPIS("Lapis", Material.LAPIS_ORE);
 
 		private String towername;
 		private Material ressource;
@@ -29,9 +31,11 @@ public class TowerInfo implements Serializable {
 
 	private static final long serialVersionUID = 2401697897143815705L;
 	private TowerType type;
+	private String ownerFaction;
 
-	public TowerInfo(TowerType type) {
+	public TowerInfo(TowerType type, String faction) {
 		this.type = type;
+		this.ownerFaction = faction;
 	}
 
 	public TowerType getType() {
@@ -51,4 +55,11 @@ public class TowerInfo implements Serializable {
 
 	}
 
+	public Faction getOwnerFaction() {
+		return FactionColl.get().getByName(ownerFaction);
+	}
+
+	public void setOwnerFaction(String faction) {
+		this.ownerFaction = faction;
+	}
 }

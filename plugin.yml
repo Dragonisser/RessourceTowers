@@ -1,6 +1,6 @@
 name: RessourceTowers
 main: de.prwh.ressourcetowers.main.RTMain
-version: 0.0.5
+version: 0.0.6
 api-version: 1.12
 
 commands:
@@ -23,6 +23,7 @@ commands:
       aliases: [listT]
     removeTower:
       description: Removes the tower at your location or all.
+      usage: /<command> [all]
       permission: ressourcetowers.removetower
       permission-message: You don't have the permissions <permission>
       aliases: [remT]
@@ -32,3 +33,15 @@ commands:
       permission: ressourcetowers.chunktower
       permission-message: You don't have the permissions <permission>
       aliases: [chunkT]
+    saveTowerList:
+      description: Saves the Tower list.
+      usage: /<command>
+      permission: ressourcetowers.savetowerlist
+      permission-message: You don't have the permissions <permission>
+      aliases: [saveT]
+    reloadTowerConfig:
+      description: Reload RessourceTower config.
+      usage: /<command>
+      permission: ressourcetowers.reloadtowerconfig
+      permission-message: You don't have the permissions <permission>
+      aliases: [relTC]
