@@ -15,6 +15,7 @@ import de.prwh.ressourcetowers.main.commands.CommandListTower;
 import de.prwh.ressourcetowers.main.commands.CommandReloadTowerConfig;
 import de.prwh.ressourcetowers.main.commands.CommandRemoveTower;
 import de.prwh.ressourcetowers.main.commands.CommandSaveTowerList;
+import de.prwh.ressourcetowers.main.commands.CommandSpawnTower;
 import de.prwh.ressourcetowers.towers.TowerLocation;
 
 public class RTMain extends JavaPlugin {
@@ -44,6 +45,7 @@ public class RTMain extends JavaPlugin {
 
 		getCommand("rt").setExecutor(new CommandInfo(this));
 		getCommand("addTower").setExecutor(new CommandAddTower());
+		getCommand("spawnTower").setExecutor(new CommandSpawnTower());
 		getCommand("listTower").setExecutor(new CommandListTower());
 		getCommand("removeTower").setExecutor(new CommandRemoveTower());
 		getCommand("chunkTower").setExecutor(new CommandChunkTower());

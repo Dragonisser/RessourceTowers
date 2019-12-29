@@ -10,7 +10,7 @@ import com.massivecraft.factions.entity.FactionColl;
 public class TowerInfo implements Serializable {
 
 	public static enum TowerType {
-		IRON("Iron", Material.IRON_ORE), GOLD("Gold", Material.GOLD_ORE), REDSTONE("Redstone", Material.REDSTONE_ORE), DIAMOND("Diamond", Material.DIAMOND_ORE), LAPIS("Lapis", Material.LAPIS_ORE);
+		COAL("Coal", Material.COAL_ORE), IRON("Iron", Material.IRON_ORE), GOLD("Gold", Material.GOLD_ORE), REDSTONE("Redstone", Material.REDSTONE_ORE), DIAMOND("Diamond", Material.DIAMOND_ORE), EMERALD("Emerald", Material.EMERALD_ORE), LAPIS("Lapis", Material.LAPIS_ORE), QUARTZ("Quartz", Material.QUARTZ_ORE);
 
 		private String towername;
 		private Material ressource;

@@ -37,6 +37,9 @@ public class CommandAddTower implements CommandExecutor {
 					TowerType type = null;
 					String types = args[0];
 					switch (types.toUpperCase()) {
+					case "COAL":
+						type = TowerType.COAL;
+						break;
 					case "IRON":
 						type = TowerType.IRON;
 						break;
@@ -49,8 +52,14 @@ public class CommandAddTower implements CommandExecutor {
 					case "DIAMOND":
 						type = TowerType.DIAMOND;
 						break;
+					case "EMERALD":
+						type = TowerType.EMERALD;
+						break;
 					case "LAPIS":
 						type = TowerType.LAPIS;
+						break;
+					case "QUARTZ":
+						type = TowerType.QUARTZ;
 						break;
 					default:
 						sender.sendMessage(ChatColor.RED + "[RessourceTowers]" + ChatColor.WHITE + " Invalid TowerType: " + Arrays.asList(TowerType.values()));

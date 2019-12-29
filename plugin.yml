@@ -1,7 +1,8 @@
 name: RessourceTowers
 main: de.prwh.ressourcetowers.main.RTMain
-version: 0.0.6
+version: 0.0.7
 api-version: 1.12
+author: Dragonisser
 
 commands:
     rt:
@@ -14,34 +15,40 @@ commands:
       usage: /<command> [towertype]
       permission: ressourcetowers.addtower
       permission-message: You don't have the permissions <permission>
-      aliases: [addT]
-    listTower:
-      description: Lists all towers.
-      usage: /<command>
-      permission: ressourcetowers.listtower
+      aliases: addT
+    spawnTower:
+      description: Spawns a tower on your location/coordinates with the given TowerType.
+      usage: /<command> [towertype]
+      permission: ressourcetowers.spawntower
       permission-message: You don't have the permissions <permission>
-      aliases: [listT]
+      aliases: spawnT
     removeTower:
       description: Removes the tower at your location or all.
       usage: /<command> [all]
       permission: ressourcetowers.removetower
       permission-message: You don't have the permissions <permission>
-      aliases: [remT]
+      aliases: remT
+    listTower:
+      description: Lists all towers.
+      usage: /<command>
+      permission: ressourcetowers.listtower
+      permission-message: You don't have the permissions <permission>
+      aliases: listT
     chunkTower:
       description: Checks if a tower is in the chunk you are standing.
       usage: /<command>
       permission: ressourcetowers.chunktower
       permission-message: You don't have the permissions <permission>
-      aliases: [chunkT]
+      aliases: chunkT
     saveTowerList:
       description: Saves the Tower list.
       usage: /<command>
       permission: ressourcetowers.savetowerlist
       permission-message: You don't have the permissions <permission>
-      aliases: [saveT]
+      aliases: saveT
     reloadTowerConfig:
       description: Reload RessourceTower config.
       usage: /<command>
       permission: ressourcetowers.reloadtowerconfig
       permission-message: You don't have the permissions <permission>
-      aliases: [relTC]
+      aliases: relTC
