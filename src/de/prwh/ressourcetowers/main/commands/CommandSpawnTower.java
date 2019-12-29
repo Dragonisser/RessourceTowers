@@ -1,5 +1,6 @@
 package de.prwh.ressourcetowers.main.commands;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -23,8 +24,11 @@ public class CommandSpawnTower implements CommandExecutor {
 				Location towerLoc = player.getLocation().add(0, 3, 0).getBlock().getLocation();
 				Location playerLoc = player.getLocation().add(0, -1, 0).getBlock().getLocation();
 				
-				HelperTower.AddTower(towerLoc, sender, args[0]);
-				HelperTower.SpawnTower(playerLoc, sender);
+				if (HelperTower.AddTower(towerLoc, sender, args[0])) {
+					HelperTower.SpawnTower(playerLoc, sender);
+				}
+			} else {
+				sender.sendMessage(ChatColor.RED + "[RessourceTowers]" + ChatColor.WHITE + " Missing argument TowerType");
 			}
 			return true;
 		}

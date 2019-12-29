@@ -1,7 +1,5 @@
 package de.prwh.ressourcetowers.main.commands;
 
-import java.util.Arrays;
-
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -9,19 +7,13 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.massivecraft.factions.entity.FactionColl;
-
-import de.prwh.ressourcetowers.towers.SerializableLocation;
-import de.prwh.ressourcetowers.towers.TowerInfo;
-import de.prwh.ressourcetowers.towers.TowerInfo.TowerType;
-import de.prwh.ressourcetowers.towers.TowerLocation;
+import de.prwh.ressourcetowers.main.commands.helper.HelperTower;
 
 public class CommandAddTower implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		Player player = null;
-		TowerLocation tLoc = TowerLocation.getInstance();
 
 		if (sender instanceof Player) {
 			player = (Player) sender;
@@ -30,56 +22,13 @@ public class CommandAddTower implements CommandExecutor {
 			if (args.length > 0 && args[0] != null) {
 
 				Location loc = player.getLocation().add(0, -1, 0).getBlock().getLocation();
+				HelperTower.AddTower(loc, sender, args[0]);
 
-				sender.sendMessage(ChatColor.RED + "[RessourceTowers]" + ChatColor.WHITE + " Trying to add tower");
-
-				try {
-					TowerType type = null;
-					String types = args[0];
-					switch (types.toUpperCase()) {
-					case "COAL":
-						type = TowerType.COAL;
-						break;
-					case "IRON":
-						type = TowerType.IRON;
-						break;
-					case "GOLD":
-						type = TowerType.GOLD;
-						break;
-					case "REDSTONE":
-						type = TowerType.REDSTONE;
-						break;
-					case "DIAMOND":
-						type = TowerType.DIAMOND;
-						break;
-					case "EMERALD":
-						type = TowerType.EMERALD;
-						break;
-					case "LAPIS":
-						type = TowerType.LAPIS;
-						break;
-					case "QUARTZ":
-						type = TowerType.QUARTZ;
-						break;
-					default:
-						sender.sendMessage(ChatColor.RED + "[RessourceTowers]" + ChatColor.WHITE + " Invalid TowerType: " + Arrays.asList(TowerType.values()));
-					}
-
-					if (!tLoc.chunkContainsTower(loc)) {
-						tLoc.addTowerLocation(new SerializableLocation(loc), new TowerInfo(type, FactionColl.get().getNone().getName()));
-						sender.sendMessage(ChatColor.RED + "[RessourceTowers] " + ChatColor.WHITE + type.getTowerName() + " at x:" + loc.getBlockX() + " y:" + loc.getBlockY() + " z:" + loc.getBlockZ()
-								+ " has been added");
-					} else {
-						sender.sendMessage(ChatColor.RED + "[RessourceTowers]" + ChatColor.WHITE + " Chunk already contains a tower ");
-					}
-					return true;
-
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
 			} else {
-				sender.sendMessage(ChatColor.RED + "[RessourceTowers]" + ChatColor.WHITE + " Missing argument TowerType");
+				sender.sendMessage(
+						ChatColor.RED + "[RessourceTowers]" + ChatColor.WHITE + " Missing argument TowerType");
 			}
+			return true;
 		}
 		return false;
 	}

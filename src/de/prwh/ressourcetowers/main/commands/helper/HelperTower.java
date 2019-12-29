@@ -16,7 +16,7 @@ import de.prwh.ressourcetowers.towers.TowerLocation;
 
 public class HelperTower {
 
-	public static void AddTower(Location loc, CommandSender sender, String towertype) {
+	public static boolean AddTower(Location loc, CommandSender sender, String towertype) {
 
 		TowerLocation tLoc = TowerLocation.getInstance();
 		sender.sendMessage(ChatColor.RED + "[RessourceTowers]" + ChatColor.WHITE + " Trying to add tower");
@@ -60,6 +60,7 @@ public class HelperTower {
 				sender.sendMessage(ChatColor.RED + "[RessourceTowers] " + ChatColor.WHITE + type.getTowerName()
 						+ " at x:" + loc.getBlockX() + " y:" + loc.getBlockY() + " z:" + loc.getBlockZ()
 						+ " has been added");
+				return true;
 			} else {
 				sender.sendMessage(
 						ChatColor.RED + "[RessourceTowers]" + ChatColor.WHITE + " Chunk already contains a tower ");
@@ -68,6 +69,7 @@ public class HelperTower {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return false;
 	}
 
 	public static void SpawnTower(Location loc, CommandSender sender) {

@@ -30,8 +30,10 @@ public class RTMain extends JavaPlugin {
 
 	public void onEnable() {
 
-		if (getServer().getPluginManager().getPlugin("Factions") == null || getServer().getPluginManager().getPlugin("MassiveCore") == null) {
-			getServer().getConsoleSender().sendMessage(ChatColor.RED + "[RessourceTowers] Plugin MassiveCore and Factions are Missing. Disabling RessourceTowers!");
+		if (getServer().getPluginManager().getPlugin("Factions") == null
+				|| getServer().getPluginManager().getPlugin("MassiveCore") == null) {
+			getServer().getConsoleSender().sendMessage(ChatColor.RED
+					+ "[RessourceTowers] Plugin MassiveCore and Factions are Missing. Disabling RessourceTowers!");
 			getServer().getPluginManager().disablePlugin(this);
 			return;
 		}
@@ -75,20 +77,21 @@ public class RTMain extends JavaPlugin {
 			}
 		}, 0, (cfg.getConfig().getInt("oreSpawnTime") * 60 * 20) * time);
 	}
-	
+
 	public void restartScheduler() {
-		
+
 		oreSpawn.cancelAllTasks();
 		autoSave.cancelAllTasks();
-		
+
 		cfg.getConfig();
-		
+
 		startAutoSave();
 		startOreSpawn();
 	}
 
 	public void onDisable() {
-		if (getServer().getPluginManager().getPlugin("Factions") != null || getServer().getPluginManager().getPlugin("MassiveCore") != null) {
+		if (getServer().getPluginManager().getPlugin("Factions") != null
+				|| getServer().getPluginManager().getPlugin("MassiveCore") != null) {
 			tlh.saveTowerList();
 		}
 	}
