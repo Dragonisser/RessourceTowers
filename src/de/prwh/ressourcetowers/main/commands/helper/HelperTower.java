@@ -71,7 +71,7 @@ public class HelperTower {
 		}
 		return false;
 	}
-
+	
 	public static void SpawnTower(Location loc, CommandSender sender) {
 		Location locNew = loc;
 
