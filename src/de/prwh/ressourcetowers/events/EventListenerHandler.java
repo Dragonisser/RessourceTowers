@@ -2,6 +2,7 @@ package de.prwh.ressourcetowers.events;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -30,9 +31,18 @@ public class EventListenerHandler implements Listener {
 	public void onBlockBreak(BlockBreakEvent event) {
 		// System.out.println(event.getBlock() + " " + event.getPlayer().getName());
 
+		FPlayer fPlayer = PlayerManager.INSTANCE.getFPlayer(event.getPlayer());
+		Location loca = event.getPlayer().getLocation();
+		FLocation fLoc = new FLocation((long)loca.getX(), (long)loca.getZ(), loca.getWorld().getName());
+		System.out.println("Location: " + fLoc);
+		System.out.println("Current Faction: " + GridManager.INSTANCE.getFactionAt(fLoc));
+		GridManager.INSTANCE.claim(fPlayer.getFaction(), fLoc);
+		System.out.println("Current Faction: " + GridManager.INSTANCE.getFactionAt(fLoc));
+		
+		
 		for (SerializableLocation loc : tlLoc.getMap().keySet()) {
 			TowerInfo info = tlLoc.getMap().get(loc);
-			FPlayer fPlayer = PlayerManager.INSTANCE.getFPlayer(event.getPlayer());
+			
 			Faction faction_tower = info.getOwnerFaction();
 			Faction faction_none = FactionManager.INSTANCE.getWilderness();
 			Faction faction = fPlayer.getFaction();
