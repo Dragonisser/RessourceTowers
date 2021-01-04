@@ -4,8 +4,8 @@ import java.io.Serializable;
 
 import org.bukkit.Material;
 
-import com.massivecraft.factions.entity.Faction;
-import com.massivecraft.factions.entity.FactionColl;
+import net.prosavage.factionsx.core.Faction;
+import net.prosavage.factionsx.manager.FactionManager;
 
 public class TowerInfo implements Serializable {
 
@@ -13,7 +13,7 @@ public class TowerInfo implements Serializable {
 		COAL("Coal", Material.COAL_ORE), IRON("Iron", Material.IRON_ORE), GOLD("Gold", Material.GOLD_ORE),
 		REDSTONE("Redstone", Material.REDSTONE_ORE), DIAMOND("Diamond", Material.DIAMOND_ORE),
 		EMERALD("Emerald", Material.EMERALD_ORE), LAPIS("Lapis", Material.LAPIS_ORE),
-		QUARTZ("Quartz", Material.QUARTZ_ORE);
+		QUARTZ("Quartz", Material.NETHER_QUARTZ_ORE);
 
 		private String towername;
 		private Material ressource;
@@ -59,7 +59,7 @@ public class TowerInfo implements Serializable {
 	}
 
 	public Faction getOwnerFaction() {
-		return FactionColl.get().getByName(ownerFaction);
+		return FactionManager.INSTANCE.getFaction(ownerFaction);
 	}
 
 	public void setOwnerFaction(String faction) {

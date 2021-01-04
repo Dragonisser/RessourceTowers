@@ -25,15 +25,14 @@ public class RTMain extends JavaPlugin {
 
 	private CreateConfig cfg = new CreateConfig();
 	private TowerLocation tlh = TowerLocation.getInstance();
-	public static final String PLUGINID = "ressourcetowers";
+	public static final String PLUGINID = "resourcetowers";
 	private static final Logger log = LogManager.getLogManager().getLogger(PLUGINID.toUpperCase());
 
 	public void onEnable() {
 
-		if (getServer().getPluginManager().getPlugin("Factions") == null
-				|| getServer().getPluginManager().getPlugin("MassiveCore") == null) {
+		if (getServer().getPluginManager().getPlugin("FactionsX") == null) {
 			getServer().getConsoleSender().sendMessage(ChatColor.RED
-					+ "[RessourceTowers] Plugin MassiveCore and Factions are Missing. Disabling RessourceTowers!");
+					+ "[ResourceTowers] Plugin FactionsX is Missing. Disabling ResourceTowers!");
 			getServer().getPluginManager().disablePlugin(this);
 			return;
 		}
@@ -80,8 +79,8 @@ public class RTMain extends JavaPlugin {
 
 	public void restartScheduler() {
 
-		oreSpawn.cancelAllTasks();
-		autoSave.cancelAllTasks();
+		oreSpawn.cancelTasks(this);
+		autoSave.cancelTasks(this);
 
 		cfg.getConfig();
 
@@ -90,8 +89,7 @@ public class RTMain extends JavaPlugin {
 	}
 
 	public void onDisable() {
-		if (getServer().getPluginManager().getPlugin("Factions") != null
-				|| getServer().getPluginManager().getPlugin("MassiveCore") != null) {
+		if (getServer().getPluginManager().getPlugin("FactionsX") != null) {
 			tlh.saveTowerList();
 		}
 	}

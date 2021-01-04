@@ -7,12 +7,11 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 
-import com.massivecraft.factions.entity.FactionColl;
-
 import de.prwh.ressourcetowers.towers.SerializableLocation;
 import de.prwh.ressourcetowers.towers.TowerInfo;
 import de.prwh.ressourcetowers.towers.TowerInfo.TowerType;
 import de.prwh.ressourcetowers.towers.TowerLocation;
+import net.prosavage.factionsx.manager.FactionManager;
 
 public class HelperTower {
 
@@ -56,7 +55,7 @@ public class HelperTower {
 
 			if (!tLoc.chunkContainsTower(loc)) {
 				tLoc.addTowerLocation(new SerializableLocation(loc),
-						new TowerInfo(type, FactionColl.get().getNone().getName()));
+						new TowerInfo(type, FactionManager.INSTANCE.getWilderness().getTag()));
 				sender.sendMessage(ChatColor.RED + "[RessourceTowers] " + ChatColor.WHITE + type.getTowerName()
 						+ " at x:" + loc.getBlockX() + " y:" + loc.getBlockY() + " z:" + loc.getBlockZ()
 						+ " has been added");
@@ -93,7 +92,7 @@ public class HelperTower {
 				locNew.setX(i);
 				locNew.setZ(j);
 
-				locNew.getBlock().setType(Material.SMOOTH_BRICK);
+				locNew.getBlock().setType(Material.LEGACY_SMOOTH_BRICK);
 			}
 		}
 
@@ -102,7 +101,7 @@ public class HelperTower {
 
 		locNew.getBlock().setType(Material.OBSIDIAN);
 		for (int i = 0; i < 3; i++) {
-			locNew.add(0, 1, 0).getBlock().setType(Material.SMOOTH_BRICK);
+			locNew.add(0, 1, 0).getBlock().setType(Material.LEGACY_SMOOTH_BRICK);
 		}
 		locNew.add(0, 1, 0).getBlock().setType(Material.OBSIDIAN);
 	}

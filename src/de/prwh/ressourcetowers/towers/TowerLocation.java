@@ -17,9 +17,8 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 
-import com.massivecraft.factions.entity.FactionColl;
-
 import de.prwh.ressourcetowers.main.RTMain;
+import net.prosavage.factionsx.manager.FactionManager;
 
 public class TowerLocation implements Serializable {
 
@@ -169,7 +168,7 @@ public class TowerLocation implements Serializable {
 
 			info = getTowerInfo(sLoc.toLocation());
 
-			if (info.getOwnerFaction().equals(FactionColl.get().getNone()))
+			if (info.getOwnerFaction().equals(FactionManager.INSTANCE.getWilderness()))
 				return;
 
 			loc = sLoc.toLocation();
@@ -181,7 +180,7 @@ public class TowerLocation implements Serializable {
 			zMax = loc.getBlockZ() + 1;
 
 			while (true) {
-				if (!loc.subtract(0, 1, 0).getBlock().getType().equals(Material.SMOOTH_BRICK))
+				if (!loc.subtract(0, 1, 0).getBlock().getType().equals(Material.LEGACY_SMOOTH_BRICK))
 					break;
 			}
 

@@ -7,13 +7,12 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.massivecraft.factions.entity.BoardColl;
-import com.massivecraft.factions.entity.Faction;
-import com.massivecraft.factions.entity.FactionColl;
-import com.massivecraft.massivecore.ps.PS;
-
 import de.prwh.ressourcetowers.towers.SerializableLocation;
 import de.prwh.ressourcetowers.towers.TowerLocation;
+import net.prosavage.factionsx.core.Faction;
+import net.prosavage.factionsx.manager.FactionManager;
+import net.prosavage.factionsx.manager.GridManager;
+import net.prosavage.factionsx.persist.data.FLocation;
 
 public class CommandRemoveTower implements CommandExecutor {
 
@@ -29,6 +28,7 @@ public class CommandRemoveTower implements CommandExecutor {
 			if (args.length == 0) {
 
 				Location loc = player.getLocation().add(0, -1, 0).getBlock().getLocation();
+				FLocation floc = new FLocation((long)loc.getX(), (long)loc.getZ(), loc.getWorld().getName());
 				try {
 					if (tLoc.locationContainsTower(loc)) {
 						sender.sendMessage(ChatColor.RED + "[RessourceTowers] " + ChatColor.WHITE + tLoc.getTowerInfo(loc).getTowername() + " tower at x:" + loc.getBlockX() + " y:" + loc.getBlockY()
@@ -38,10 +38,8 @@ public class CommandRemoveTower implements CommandExecutor {
 						/*
 						 * Unclaim faction chunk with tower in it
 						 */
-						Faction faction = FactionColl.get().getNone();
-
-						PS chunk = PS.valueOf(loc);
-						BoardColl.get().setFactionAt(chunk, faction);
+						Faction faction = FactionManager.INSTANCE.getWilderness();
+						GridManager.INSTANCE.claim(faction, floc);
 
 					} else {
 						sender.sendMessage(ChatColor.RED + "[RessourceTowers]" + ChatColor.WHITE + " Location x:" + loc.getBlockX() + " y:" + loc.getBlockY() + " z:" + loc.getBlockZ()
@@ -58,10 +56,9 @@ public class CommandRemoveTower implements CommandExecutor {
 					 * Unclaim faction chunk with tower in it
 					 */
 					for (SerializableLocation loc : tLoc.getMap().keySet()) {
-						Faction faction = FactionColl.get().getNone();
-
-						PS chunk = PS.valueOf(loc.toLocation());
-						BoardColl.get().setFactionAt(chunk, faction);
+						FLocation floc = new FLocation((long)loc.getX(), (long)loc.getZ(), loc.getWorld().getName());
+						Faction faction = FactionManager.INSTANCE.getWilderness();
+						GridManager.INSTANCE.claim(faction, floc);
 					}
 					tLoc.removeAllTowers();
 

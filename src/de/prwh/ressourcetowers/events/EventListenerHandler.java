@@ -10,19 +10,22 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import com.massivecraft.factions.entity.Faction;
-import com.massivecraft.factions.entity.FactionColl;
-import com.massivecraft.factions.entity.MPlayer;
-
 import de.prwh.ressourcetowers.main.RTPermissions;
 import de.prwh.ressourcetowers.towers.SerializableLocation;
 import de.prwh.ressourcetowers.towers.TowerInfo;
 import de.prwh.ressourcetowers.towers.TowerLocation;
+import net.prosavage.factionsx.core.FPlayer;
+import net.prosavage.factionsx.core.Faction;
+import net.prosavage.factionsx.manager.FactionManager;
+import net.prosavage.factionsx.manager.GridManager;
+import net.prosavage.factionsx.manager.PlayerManager;
+import net.prosavage.factionsx.persist.data.FLocation;
+
 
 public class EventListenerHandler implements Listener {
 
 	TowerLocation tlLoc = TowerLocation.getInstance();
-	MPlayer fPlayer;
+	FPlayer fPlayer;
 
 	@EventHandler
 	public void onBlockBreak(BlockBreakEvent event) {
@@ -30,34 +33,47 @@ public class EventListenerHandler implements Listener {
 
 		for (SerializableLocation loc : tlLoc.getMap().keySet()) {
 			TowerInfo info = tlLoc.getMap().get(loc);
-			fPlayer = MPlayer.get(event.getPlayer());
+			fPlayer = PlayerManager.INSTANCE.getFPlayer(event.getPlayer());
 			Faction faction_tower = info.getOwnerFaction();
-			Faction faction_none = FactionColl.get().getNone();
+			Faction faction_none = FactionManager.INSTANCE.getWilderness();
 			Faction faction = fPlayer.getFaction();
 
 			if (event.getBlock().getLocation().equals(loc.toLocation())) {
 				// System.out.println("Towerblock " + loc.toLocation());
 				// PS chunk_tower = PS.valueOf(loc.toLocation().getChunk());
+				FLocation fLocation = new FLocation((long)loc.getX(), (long)loc.getZ(), loc.getWorld().getName());
 
 				if (fPlayer.hasFaction()) {
 					if (faction_tower.equals(faction)) {
-						event.getPlayer().sendMessage(ChatColor.RED + "[RessourceTowers]" + ChatColor.WHITE + " Tower already belongs to your Faction");
+						event.getPlayer().sendMessage(ChatColor.RED + "[RessourceTowers]" + ChatColor.WHITE
+								+ " Tower already belongs to your Faction");
 					} else {
 						if (faction_tower.equals(faction_none)) {
 							// BoardColl.get().setFactionAt(chunk_tower, faction);
-							info.setOwnerFaction(faction.getName());
-							tlLoc.updateTowerLocation(loc, info);
-							event.getPlayer().sendMessage(ChatColor.RED + "[RessourceTowers]" + ChatColor.WHITE + " Tower has been captured");
-							Bukkit.broadcastMessage(ChatColor.RED + "[RessourceTowers]" + ChatColor.GREEN + " Faction '" + faction.getName() + "'" + ChatColor.WHITE + " has captured an "
-									+ TowerLocation.getInstance().getTowerInfo(loc.toLocation()).getTowername());
-						} else {
-							// BoardColl.get().setFactionAt(chunk_tower, faction);
-							info.setOwnerFaction(faction.getName());
+							System.out.println(GridManager.INSTANCE.getFactionAt(fLocation));
+							System.out.println(fLocation);
+							System.out.println(faction);
+							GridManager.INSTANCE.claim(faction, fLocation);
+							System.out.println(GridManager.INSTANCE.getFactionAt(fLocation));
+							info.setOwnerFaction(faction.getTag());
 							tlLoc.updateTowerLocation(loc, info);
 							event.getPlayer().sendMessage(
-									ChatColor.RED + "[RessourceTowers]" + ChatColor.WHITE + " You have stolen a tower from the Faction " + ChatColor.GREEN + "'" + faction_tower.getName() + "'");
-							Bukkit.broadcastMessage(ChatColor.RED + "[RessourceTowers]" + ChatColor.GREEN + " Faction '" + faction.getName() + "'" + ChatColor.WHITE + " has stolen an "
-									+ TowerLocation.getInstance().getTowerInfo(loc.toLocation()).getTowername() + " from " + ChatColor.GREEN + "Faction '" + faction_tower.getName() + "'");
+									ChatColor.RED + "[RessourceTowers]" + ChatColor.WHITE + " Tower has been captured");
+							Bukkit.broadcastMessage(ChatColor.RED + "[RessourceTowers]" + ChatColor.GREEN + " Faction '"
+									+ faction.getTag() + "'" + ChatColor.WHITE + " has captured an "
+									+ TowerLocation.getInstance().getTowerInfo(loc.toLocation()).getTowername());
+						} else {
+							GridManager.INSTANCE.claim(faction, fLocation);
+							info.setOwnerFaction(faction.getTag());
+							tlLoc.updateTowerLocation(loc, info);
+							event.getPlayer()
+									.sendMessage(ChatColor.RED + "[RessourceTowers]" + ChatColor.WHITE
+											+ " You have stolen a tower from the Faction " + ChatColor.GREEN + "'"
+											+ faction_tower.getTag() + "'");
+							Bukkit.broadcastMessage(ChatColor.RED + "[RessourceTowers]" + ChatColor.GREEN + " Faction '"
+									+ faction.getTag() + "'" + ChatColor.WHITE + " has stolen an "
+									+ TowerLocation.getInstance().getTowerInfo(loc.toLocation()).getTowername()
+									+ " from " + ChatColor.GREEN + "Faction '" + faction_tower.getTag() + "'");
 						}
 					}
 				} else {
@@ -65,7 +81,8 @@ public class EventListenerHandler implements Listener {
 							ChatColor.RED + "[RessourceTowers]" + ChatColor.WHITE + " You don't belong to a Faction!");
 				}
 				event.setCancelled(true);
-			} else if (event.getBlock().getChunk().getX() == loc.toLocation().getChunk().getX() && event.getBlock().getChunk().getZ() == loc.toLocation().getChunk().getZ()) {
+			} else if (event.getBlock().getChunk().getX() == loc.toLocation().getChunk().getX()
+					&& event.getBlock().getChunk().getZ() == loc.toLocation().getChunk().getZ()) {
 				// System.out.println("Chunkblock " + loc.toLocation());
 				if (!event.getPlayer().hasPermission(RTPermissions.EditTower.getPermissionName())) {
 					if (fPlayer.hasFaction()) {
@@ -83,9 +100,6 @@ public class EventListenerHandler implements Listener {
 							case REDSTONE_ORE:
 								event.setCancelled(false);
 								break;
-							case GLOWING_REDSTONE_ORE:
-								event.setCancelled(false);
-								break;
 							case DIAMOND_ORE:
 								event.setCancelled(false);
 								break;
@@ -95,7 +109,7 @@ public class EventListenerHandler implements Listener {
 							case LAPIS_ORE:
 								event.setCancelled(false);
 								break;
-							case QUARTZ_ORE:
+							case NETHER_QUARTZ_ORE:
 								event.setCancelled(false);
 								break;
 							default:
@@ -120,7 +134,8 @@ public class EventListenerHandler implements Listener {
 	public void onBlockPlace(BlockPlaceEvent event) {
 		if (!event.getPlayer().hasPermission(RTPermissions.EditTower.getPermissionName())) {
 			for (SerializableLocation loc : tlLoc.getMap().keySet()) {
-				if (event.getBlock().getChunk().getX() == loc.toLocation().getChunk().getX() && event.getBlock().getChunk().getZ() == loc.toLocation().getChunk().getZ())
+				if (event.getBlock().getChunk().getX() == loc.toLocation().getChunk().getX()
+						&& event.getBlock().getChunk().getZ() == loc.toLocation().getChunk().getZ())
 					event.setCancelled(true);
 			}
 		}
