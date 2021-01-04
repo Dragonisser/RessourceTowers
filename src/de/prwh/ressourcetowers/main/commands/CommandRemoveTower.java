@@ -38,8 +38,11 @@ public class CommandRemoveTower implements CommandExecutor {
 						/*
 						 * Unclaim faction chunk with tower in it
 						 */
+						System.out.println(GridManager.INSTANCE.getFactionAt(floc));
 						Faction faction = FactionManager.INSTANCE.getWilderness();
-						GridManager.INSTANCE.claim(faction, floc);
+						GridManager.INSTANCE.unclaim(faction, floc);
+						System.out.println(GridManager.INSTANCE.getFactionAt(floc));
+						
 
 					} else {
 						sender.sendMessage(ChatColor.RED + "[RessourceTowers]" + ChatColor.WHITE + " Location x:" + loc.getBlockX() + " y:" + loc.getBlockY() + " z:" + loc.getBlockZ()
@@ -58,7 +61,7 @@ public class CommandRemoveTower implements CommandExecutor {
 					for (SerializableLocation loc : tLoc.getMap().keySet()) {
 						FLocation floc = new FLocation((long)loc.getX(), (long)loc.getZ(), loc.getWorld().getName());
 						Faction faction = FactionManager.INSTANCE.getWilderness();
-						GridManager.INSTANCE.claim(faction, floc);
+						GridManager.INSTANCE.unclaim(faction, floc);
 					}
 					tLoc.removeAllTowers();
 

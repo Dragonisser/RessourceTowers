@@ -25,7 +25,6 @@ import net.prosavage.factionsx.persist.data.FLocation;
 public class EventListenerHandler implements Listener {
 
 	TowerLocation tlLoc = TowerLocation.getInstance();
-	FPlayer fPlayer;
 
 	@EventHandler
 	public void onBlockBreak(BlockBreakEvent event) {
@@ -33,10 +32,11 @@ public class EventListenerHandler implements Listener {
 
 		for (SerializableLocation loc : tlLoc.getMap().keySet()) {
 			TowerInfo info = tlLoc.getMap().get(loc);
-			fPlayer = PlayerManager.INSTANCE.getFPlayer(event.getPlayer());
+			FPlayer fPlayer = PlayerManager.INSTANCE.getFPlayer(event.getPlayer());
 			Faction faction_tower = info.getOwnerFaction();
 			Faction faction_none = FactionManager.INSTANCE.getWilderness();
 			Faction faction = fPlayer.getFaction();
+			Faction faction_safezone = FactionManager.INSTANCE.getFaction(FactionManager.SAFEZONE_ID);
 
 			if (event.getBlock().getLocation().equals(loc.toLocation())) {
 				// System.out.println("Towerblock " + loc.toLocation());
@@ -50,13 +50,13 @@ public class EventListenerHandler implements Listener {
 					} else {
 						if (faction_tower.equals(faction_none)) {
 							// BoardColl.get().setFactionAt(chunk_tower, faction);
-							System.out.println(GridManager.INSTANCE.getFactionAt(fLocation));
-							System.out.println(fLocation);
-							System.out.println(faction);
-							GridManager.INSTANCE.claim(faction, fLocation);
-							System.out.println(GridManager.INSTANCE.getFactionAt(fLocation));
+							System.out.println("Location: " + fLocation);
+							System.out.println("Current Faction: " + GridManager.INSTANCE.getFactionAt(fLocation));
+							System.out.println("Player Faction: " + faction);
+							GridManager.INSTANCE.claim(faction_safezone, fLocation);
+							System.out.println("Set Faction: " + GridManager.INSTANCE.getFactionAt(fLocation));
 							info.setOwnerFaction(faction.getTag());
-							tlLoc.updateTowerLocation(loc, info);
+							//tlLoc.updateTowerLocation(loc, info);
 							event.getPlayer().sendMessage(
 									ChatColor.RED + "[RessourceTowers]" + ChatColor.WHITE + " Tower has been captured");
 							Bukkit.broadcastMessage(ChatColor.RED + "[RessourceTowers]" + ChatColor.GREEN + " Faction '"
@@ -65,7 +65,7 @@ public class EventListenerHandler implements Listener {
 						} else {
 							GridManager.INSTANCE.claim(faction, fLocation);
 							info.setOwnerFaction(faction.getTag());
-							tlLoc.updateTowerLocation(loc, info);
+							//tlLoc.updateTowerLocation(loc, info);
 							event.getPlayer()
 									.sendMessage(ChatColor.RED + "[RessourceTowers]" + ChatColor.WHITE
 											+ " You have stolen a tower from the Faction " + ChatColor.GREEN + "'"
