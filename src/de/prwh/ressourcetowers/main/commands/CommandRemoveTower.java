@@ -1,6 +1,7 @@
 package de.prwh.ressourcetowers.main.commands;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -28,7 +29,8 @@ public class CommandRemoveTower implements CommandExecutor {
 			if (args.length == 0) {
 
 				Location loc = player.getLocation().add(0, -1, 0).getBlock().getLocation();
-				FLocation floc = new FLocation((long)loc.getX(), (long)loc.getZ(), loc.getWorld().getName());
+				Chunk chunk = player.getLocation().getChunk();
+				FLocation fLoc = new FLocation(chunk.getX(), chunk.getZ(), chunk.getWorld().getName());
 				try {
 					if (tLoc.locationContainsTower(loc)) {
 						sender.sendMessage(ChatColor.RED + "[RessourceTowers] " + ChatColor.WHITE + tLoc.getTowerInfo(loc).getTowername() + " tower at x:" + loc.getBlockX() + " y:" + loc.getBlockY()
@@ -38,12 +40,8 @@ public class CommandRemoveTower implements CommandExecutor {
 						/*
 						 * Unclaim faction chunk with tower in it
 						 */
-						System.out.println(GridManager.INSTANCE.getFactionAt(floc));
 						Faction faction = FactionManager.INSTANCE.getWilderness();
-						GridManager.INSTANCE.unclaim(faction, floc);
-						System.out.println(GridManager.INSTANCE.getFactionAt(floc));
-						
-
+						GridManager.INSTANCE.unclaim(faction, fLoc);
 					} else {
 						sender.sendMessage(ChatColor.RED + "[RessourceTowers]" + ChatColor.WHITE + " Location x:" + loc.getBlockX() + " y:" + loc.getBlockY() + " z:" + loc.getBlockZ()
 								+ " does not contain a tower");
@@ -59,9 +57,10 @@ public class CommandRemoveTower implements CommandExecutor {
 					 * Unclaim faction chunk with tower in it
 					 */
 					for (SerializableLocation loc : tLoc.getMap().keySet()) {
-						FLocation floc = new FLocation((long)loc.getX(), (long)loc.getZ(), loc.getWorld().getName());
+						Chunk chunk = loc.toLocation().getChunk();
+						FLocation fLoc = new FLocation(chunk.getX(), chunk.getZ(), chunk.getWorld().getName());
 						Faction faction = FactionManager.INSTANCE.getWilderness();
-						GridManager.INSTANCE.unclaim(faction, floc);
+						GridManager.INSTANCE.unclaim(faction, fLoc);
 					}
 					tLoc.removeAllTowers();
 

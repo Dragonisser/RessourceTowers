@@ -2,7 +2,7 @@ package de.prwh.ressourcetowers.events;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
+import org.bukkit.Chunk;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -30,28 +30,19 @@ public class EventListenerHandler implements Listener {
 	@EventHandler
 	public void onBlockBreak(BlockBreakEvent event) {
 		// System.out.println(event.getBlock() + " " + event.getPlayer().getName());
-
-		FPlayer fPlayer = PlayerManager.INSTANCE.getFPlayer(event.getPlayer());
-		Location loca = event.getPlayer().getLocation();
-		FLocation fLoc = new FLocation((long)loca.getX(), (long)loca.getZ(), loca.getWorld().getName());
-		System.out.println("Location: " + fLoc);
-		System.out.println("Current Faction: " + GridManager.INSTANCE.getFactionAt(fLoc));
-		GridManager.INSTANCE.claim(fPlayer.getFaction(), fLoc);
-		System.out.println("Current Faction: " + GridManager.INSTANCE.getFactionAt(fLoc));
-		
 		
 		for (SerializableLocation loc : tlLoc.getMap().keySet()) {
 			TowerInfo info = tlLoc.getMap().get(loc);
-			
+			FPlayer fPlayer = PlayerManager.INSTANCE.getFPlayer(event.getPlayer());
 			Faction faction_tower = info.getOwnerFaction();
 			Faction faction_none = FactionManager.INSTANCE.getWilderness();
 			Faction faction = fPlayer.getFaction();
-			Faction faction_safezone = FactionManager.INSTANCE.getFaction(FactionManager.SAFEZONE_ID);
 
 			if (event.getBlock().getLocation().equals(loc.toLocation())) {
 				// System.out.println("Towerblock " + loc.toLocation());
 				// PS chunk_tower = PS.valueOf(loc.toLocation().getChunk());
-				FLocation fLocation = new FLocation((long)loc.getX(), (long)loc.getZ(), loc.getWorld().getName());
+				Chunk chunk = event.getBlock().getChunk();
+				FLocation fLocation = new FLocation(chunk.getX(), chunk.getZ(), chunk.getWorld().getName());
 
 				if (fPlayer.hasFaction()) {
 					if (faction_tower.equals(faction)) {
@@ -60,11 +51,7 @@ public class EventListenerHandler implements Listener {
 					} else {
 						if (faction_tower.equals(faction_none)) {
 							// BoardColl.get().setFactionAt(chunk_tower, faction);
-							System.out.println("Location: " + fLocation);
-							System.out.println("Current Faction: " + GridManager.INSTANCE.getFactionAt(fLocation));
-							System.out.println("Player Faction: " + faction);
-							GridManager.INSTANCE.claim(faction_safezone, fLocation);
-							System.out.println("Set Faction: " + GridManager.INSTANCE.getFactionAt(fLocation));
+							GridManager.INSTANCE.claim(faction, fLocation);
 							info.setOwnerFaction(faction.getTag());
 							//tlLoc.updateTowerLocation(loc, info);
 							event.getPlayer().sendMessage(
