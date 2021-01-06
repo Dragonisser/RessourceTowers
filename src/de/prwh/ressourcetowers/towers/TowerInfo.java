@@ -52,7 +52,7 @@ public class TowerInfo implements Serializable {
 	}
 
 	public String toString() {
-		return getTowername();
+		return getTowername() + " - " + getOwnerFaction().getTag();
 
 	}
 

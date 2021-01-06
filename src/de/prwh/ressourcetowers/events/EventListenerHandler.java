@@ -19,6 +19,8 @@ import de.prwh.ressourcetowers.towers.TowerInfo.TowerType;
 import de.prwh.ressourcetowers.towers.TowerLocation;
 import net.prosavage.factionsx.core.FPlayer;
 import net.prosavage.factionsx.core.Faction;
+import net.prosavage.factionsx.event.FactionPreClaimEvent;
+import net.prosavage.factionsx.event.FactionUnClaimEvent;
 import net.prosavage.factionsx.manager.FactionManager;
 import net.prosavage.factionsx.manager.GridManager;
 import net.prosavage.factionsx.manager.PlayerManager;
@@ -116,6 +118,28 @@ public class EventListenerHandler implements Listener {
 		for (SerializableLocation loc : tlLoc.getMap().keySet()) {
 			if (event.getBlock().getLocation().equals(loc.toLocation())) {
 				event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 20 * 40, 0));
+			}
+		}
+	}
+	
+	@EventHandler
+	public void onPreClaim(FactionPreClaimEvent event) {
+		for (SerializableLocation loc : tlLoc.getMap().keySet()) {
+			if(loc.toLocation().getChunk().equals(event.getFLocation().getChunk())) {
+				event.setCancelled(true);
+				event.getFplayer().getPlayer().sendMessage(
+						ChatColor.RED + "[RessourceTowers]" + ChatColor.WHITE + " Chunks with a RessourceTower cant be claimed!");
+			}
+		}
+	}
+	
+	@EventHandler
+	public void onUnClaim(FactionUnClaimEvent event) {
+		for (SerializableLocation loc : tlLoc.getMap().keySet()) {
+			if(loc.toLocation().getChunk().equals(event.getFLocation().getChunk())) {
+				event.setCancelled(true);
+				event.getFplayer().getPlayer().sendMessage(
+						ChatColor.RED + "[RessourceTowers]" + ChatColor.WHITE + " Chunks with a RessourceTower cant be unclaimed!");
 			}
 		}
 	}

@@ -41,8 +41,7 @@ public class TowerLocation implements Serializable {
 	}
 
 	public void updateTowerLocation(SerializableLocation loc, TowerInfo tower) {
-		map.remove(loc);
-		map.put(loc, tower);
+		addTowerLocation(loc, tower);
 	}
 
 	public void removeTowerLocation(Location loc) {
