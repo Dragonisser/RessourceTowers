@@ -3,6 +3,7 @@ package de.prwh.ressourcetowers.events;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -75,26 +76,26 @@ public class EventListenerHandler implements Listener {
 							ChatColor.RED + "[RessourceTowers]" + ChatColor.WHITE + " You don't belong to a Faction!");
 				}
 				event.setCancelled(true);
-			} else if (event.getBlock().getChunk().getX() == loc.toLocation().getChunk().getX()
-					&& event.getBlock().getChunk().getZ() == loc.toLocation().getChunk().getZ()) {
-				if (!event.getPlayer().hasPermission(RTPermissions.EditTower.getPermissionName())) {
+			} else if (event.getBlock().getChunk().equals(loc.toLocation().getChunk())) {
+				if (event.getPlayer().hasPermission(RTPermissions.EditTower.getPermissionName())) {
+					event.setCancelled(false);
+				} else {
 					if (fPlayer.hasFaction()) {
 						if (fPlayer.getFaction().equals(faction_tower)) {
-							for(TowerType type : TowerType.values()) {
-								if(Bukkit.createBlockData(type.getTowerRessource()).equals(event.getBlock().getBlockData())) {
-									event.setCancelled(false);
-								} else {
-									event.setCancelled(true);
-								}
+							if(containsTowerType(event.getBlock().getBlockData())) {
+								event.setCancelled(false);
+							} else {
+								event.setCancelled(true);
 							}
 						} else {
+							event.getPlayer().sendMessage(
+									ChatColor.RED + "[RessourceTowers]" + ChatColor.WHITE + " This Tower doesnt belong to your Faction!");
 							event.setCancelled(true);
 						}
 					} else {
 						event.setCancelled(true);
 					}
 				}
-
 			}
 		}
 	}
@@ -117,5 +118,14 @@ public class EventListenerHandler implements Listener {
 				event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 20 * 40, 0));
 			}
 		}
+	}
+	
+	private boolean containsTowerType(BlockData blockData) {
+		for(TowerType type : TowerType.values()) {
+			if(Bukkit.createBlockData(type.getTowerRessource()).equals(blockData)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
