@@ -14,6 +14,7 @@ import org.bukkit.potion.PotionEffectType;
 import de.prwh.ressourcetowers.main.RTPermissions;
 import de.prwh.ressourcetowers.towers.SerializableLocation;
 import de.prwh.ressourcetowers.towers.TowerInfo;
+import de.prwh.ressourcetowers.towers.TowerInfo.TowerType;
 import de.prwh.ressourcetowers.towers.TowerLocation;
 import net.prosavage.factionsx.core.FPlayer;
 import net.prosavage.factionsx.core.Faction;
@@ -29,31 +30,29 @@ public class EventListenerHandler implements Listener {
 
 	@EventHandler
 	public void onBlockBreak(BlockBreakEvent event) {
-		// System.out.println(event.getBlock() + " " + event.getPlayer().getName());
+		System.out.println(event.getBlock() + " " + event.getPlayer().getName());
+		//System.out.println(event.getBlock().getBlockData().equals(Bukkit.createBlockData("minecraft:stone_bricks")));
 		
 		for (SerializableLocation loc : tlLoc.getMap().keySet()) {
 			TowerInfo info = tlLoc.getMap().get(loc);
 			FPlayer fPlayer = PlayerManager.INSTANCE.getFPlayer(event.getPlayer());
 			Faction faction_tower = info.getOwnerFaction();
 			Faction faction_none = FactionManager.INSTANCE.getWilderness();
-			Faction faction = fPlayer.getFaction();
 
 			if (event.getBlock().getLocation().equals(loc.toLocation())) {
-				// System.out.println("Towerblock " + loc.toLocation());
-				// PS chunk_tower = PS.valueOf(loc.toLocation().getChunk());
 				Chunk chunk = event.getBlock().getChunk();
 				FLocation fLocation = new FLocation(chunk.getX(), chunk.getZ(), chunk.getWorld().getName());
 
 				if (fPlayer.hasFaction()) {
+					Faction faction = fPlayer.getFaction();
 					if (faction_tower.equals(faction)) {
 						event.getPlayer().sendMessage(ChatColor.RED + "[RessourceTowers]" + ChatColor.WHITE
 								+ " Tower already belongs to your Faction");
 					} else {
 						if (faction_tower.equals(faction_none)) {
-							// BoardColl.get().setFactionAt(chunk_tower, faction);
 							GridManager.INSTANCE.claim(faction, fLocation);
 							info.setOwnerFaction(faction.getTag());
-							//tlLoc.updateTowerLocation(loc, info);
+							tlLoc.updateTowerLocation(loc, info);
 							event.getPlayer().sendMessage(
 									ChatColor.RED + "[RessourceTowers]" + ChatColor.WHITE + " Tower has been captured");
 							Bukkit.broadcastMessage(ChatColor.RED + "[RessourceTowers]" + ChatColor.GREEN + " Faction '"
@@ -62,7 +61,7 @@ public class EventListenerHandler implements Listener {
 						} else {
 							GridManager.INSTANCE.claim(faction, fLocation);
 							info.setOwnerFaction(faction.getTag());
-							//tlLoc.updateTowerLocation(loc, info);
+							tlLoc.updateTowerLocation(loc, info);
 							event.getPlayer()
 									.sendMessage(ChatColor.RED + "[RessourceTowers]" + ChatColor.WHITE
 											+ " You have stolen a tower from the Faction " + ChatColor.GREEN + "'"
@@ -84,34 +83,12 @@ public class EventListenerHandler implements Listener {
 				if (!event.getPlayer().hasPermission(RTPermissions.EditTower.getPermissionName())) {
 					if (fPlayer.hasFaction()) {
 						if (fPlayer.getFaction().equals(faction_tower)) {
-							switch (event.getBlock().getType()) {
-							case COAL_ORE:
-								event.setCancelled(false);
-								break;
-							case IRON_ORE:
-								event.setCancelled(false);
-								break;
-							case GOLD_ORE:
-								event.setCancelled(false);
-								break;
-							case REDSTONE_ORE:
-								event.setCancelled(false);
-								break;
-							case DIAMOND_ORE:
-								event.setCancelled(false);
-								break;
-							case EMERALD_ORE:
-								event.setCancelled(false);
-								break;
-							case LAPIS_ORE:
-								event.setCancelled(false);
-								break;
-							case NETHER_QUARTZ_ORE:
-								event.setCancelled(false);
-								break;
-							default:
-								event.setCancelled(true);
-								break;
+							for(TowerType type : TowerType.values()) {
+								if(Bukkit.createBlockData(type.getTowerRessource()).equals(event.getBlock().getBlockData())) {
+									event.setCancelled(false);
+								} else {
+									event.setCancelled(true);
+								}
 							}
 						} else {
 							event.setCancelled(true);

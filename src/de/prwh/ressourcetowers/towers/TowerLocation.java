@@ -11,10 +11,11 @@ import java.util.HashMap;
 import java.util.Random;
 import java.util.logging.Level;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.command.CommandSender;
 
 import de.prwh.ressourcetowers.main.RTMain;
@@ -161,7 +162,7 @@ public class TowerLocation implements Serializable {
 		int zMin, zMax;
 		Location loc;
 		TowerInfo info;
-		Material stack;
+		BlockData blockData;
 		Random rand = new Random();
 
 		for (SerializableLocation sLoc : map.keySet()) {
@@ -173,16 +174,19 @@ public class TowerLocation implements Serializable {
 
 			loc = sLoc.toLocation();
 
-			stack = info.getRessource();
+			blockData = Bukkit.createBlockData(info.getRessource());
 			xMin = loc.getBlockX() - 1;
 			xMax = loc.getBlockX() + 1;
 			zMin = loc.getBlockZ() - 1;
 			zMax = loc.getBlockZ() + 1;
 
+
 			while (true) {
-				if (!loc.subtract(0, 1, 0).getBlock().getType().equals(Material.LEGACY_SMOOTH_BRICK))
+				if (loc.subtract(0, 1, 0).getBlock().getBlockData().equals(Bukkit.createBlockData("minecraft:obsidian"))) {
 					break;
+				}	
 			}
+			System.out.println(loc.getBlock().getBlockData());
 
 			int x = xMin + rand.nextInt(xMax - xMin + 1);
 			int z = zMin + rand.nextInt(zMax - zMin + 1);
@@ -193,7 +197,7 @@ public class TowerLocation implements Serializable {
 			loc.setZ(z);
 			loc.setY(loc.getBlockY() + 1);
 
-			loc.getBlock().setType(stack);
+			loc.getBlock().setBlockData(blockData);
 		}
 	}
 }

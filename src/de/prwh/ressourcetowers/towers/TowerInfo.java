@@ -2,31 +2,29 @@ package de.prwh.ressourcetowers.towers;
 
 import java.io.Serializable;
 
-import org.bukkit.Material;
-
 import net.prosavage.factionsx.core.Faction;
 import net.prosavage.factionsx.manager.FactionManager;
 
 public class TowerInfo implements Serializable {
 
 	public static enum TowerType {
-		COAL("Coal", Material.COAL_ORE), IRON("Iron", Material.IRON_ORE), GOLD("Gold", Material.GOLD_ORE),
-		REDSTONE("Redstone", Material.REDSTONE_ORE), DIAMOND("Diamond", Material.DIAMOND_ORE),
-		EMERALD("Emerald", Material.EMERALD_ORE), LAPIS("Lapis", Material.LAPIS_ORE),
-		QUARTZ("Quartz", Material.NETHER_QUARTZ_ORE);
+		COAL("Coal", "minecraft:coal_ore"), IRON("Iron", "minecraft:iron_ore"), GOLD("Gold", "minecraft:gold_ore"),
+		REDSTONE("Redstone", "minecraft:redstone_ore[lit=false]"), DIAMOND("Diamond", "minecraft:diamond_ore"),
+		EMERALD("Emerald", "minecraft:emerald_ore"), LAPIS("Lapis", "minecraft:lapis_ore"),
+		QUARTZ("Quartz", "minecraft:nether_quartz_ore");
 
 		private String towername;
-		private Material ressource;
+		private String ressource;
 
 		public String getTowerName() {
 			return towername + "-tower";
 		}
 
-		public Material getTowerRessource() {
+		public String getTowerRessource() {
 			return ressource;
 		}
 
-		private TowerType(String towername, Material ressource) {
+		private TowerType(String towername, String ressource) {
 			this.towername = towername;
 			this.ressource = ressource;
 		}
@@ -45,7 +43,7 @@ public class TowerInfo implements Serializable {
 		return type;
 	}
 
-	public Material getRessource() {
+	public String getRessource() {
 		return type.getTowerRessource();
 	}
 

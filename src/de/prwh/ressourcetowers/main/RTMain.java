@@ -25,14 +25,14 @@ public class RTMain extends JavaPlugin {
 
 	private CreateConfig cfg = new CreateConfig();
 	private TowerLocation tlh = TowerLocation.getInstance();
-	public static final String PLUGINID = "resourcetowers";
+	public static final String PLUGINID = "ressourcetowers";
 	private static final Logger log = LogManager.getLogManager().getLogger(PLUGINID.toUpperCase());
 
 	public void onEnable() {
 
 		if (getServer().getPluginManager().getPlugin("FactionsX") == null) {
 			getServer().getConsoleSender().sendMessage(ChatColor.RED
-					+ "[ResourceTowers] Plugin FactionsX is Missing. Disabling ResourceTowers!");
+					+ "[RessourceTowers] Plugin FactionsX is Missing. Disabling RessourceTowers!");
 			getServer().getPluginManager().disablePlugin(this);
 			return;
 		}

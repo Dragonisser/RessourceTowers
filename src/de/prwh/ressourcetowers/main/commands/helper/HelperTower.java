@@ -2,9 +2,9 @@ package de.prwh.ressourcetowers.main.commands.helper;
 
 import java.util.Arrays;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 
 import de.prwh.ressourcetowers.towers.SerializableLocation;
@@ -83,7 +83,7 @@ public class HelperTower {
 				locNew.setX(i);
 				locNew.setZ(j);
 
-				locNew.getBlock().setType(Material.SEA_LANTERN);
+				locNew.getBlock().setBlockData(Bukkit.createBlockData("minecraft:sea_lantern"));
 			}
 		}
 		for (int i = x - 1; i <= x + 1; i++) {
@@ -92,17 +92,17 @@ public class HelperTower {
 				locNew.setX(i);
 				locNew.setZ(j);
 
-				locNew.getBlock().setType(Material.LEGACY_SMOOTH_BRICK);
+				locNew.getBlock().setBlockData(Bukkit.createBlockData("minecraft:stone_bricks"));
 			}
 		}
 
 		locNew.setX(x);
 		locNew.setZ(z);
 
-		locNew.getBlock().setType(Material.OBSIDIAN);
+		locNew.getBlock().setBlockData(Bukkit.createBlockData("minecraft:obsidian"));
 		for (int i = 0; i < 3; i++) {
-			locNew.add(0, 1, 0).getBlock().setType(Material.LEGACY_SMOOTH_BRICK);
+			locNew.add(0, 1, 0).getBlock().setBlockData(Bukkit.createBlockData("minecraft:stone_bricks"));
 		}
-		locNew.add(0, 1, 0).getBlock().setType(Material.OBSIDIAN);
+		locNew.add(0, 1, 0).getBlock().setBlockData(Bukkit.createBlockData("minecraft:obsidian"));
 	}
 }
