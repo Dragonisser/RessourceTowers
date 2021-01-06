@@ -8,15 +8,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import de.prwh.ressourcetowers.events.EventListenerHandler;
-import de.prwh.ressourcetowers.main.commands.CommandAddTower;
-import de.prwh.ressourcetowers.main.commands.CommandChunkTower;
-import de.prwh.ressourcetowers.main.commands.CommandInfo;
-import de.prwh.ressourcetowers.main.commands.CommandListTower;
-import de.prwh.ressourcetowers.main.commands.CommandReloadTowerConfig;
-import de.prwh.ressourcetowers.main.commands.CommandRemoveTower;
-import de.prwh.ressourcetowers.main.commands.CommandSaveTowerList;
-import de.prwh.ressourcetowers.main.commands.CommandSpawnTower;
-import de.prwh.ressourcetowers.towers.TowerLocation;
+import de.prwh.ressourcetowers.main.commands.CommandHelper;
+import de.prwh.ressourcetowers.towers.TowerHelper;
 
 public class RTMain extends JavaPlugin {
 
@@ -24,7 +17,7 @@ public class RTMain extends JavaPlugin {
 	BukkitScheduler oreSpawn = getServer().getScheduler();
 
 	private CreateConfig cfg = new CreateConfig();
-	private TowerLocation tlh = TowerLocation.getInstance();
+	private TowerHelper tlh = TowerHelper.getInstance();
 	public static final String PLUGINID = "ressourcetowers";
 	private static final Logger log = LogManager.getLogManager().getLogger(PLUGINID.toUpperCase());
 
@@ -44,14 +37,7 @@ public class RTMain extends JavaPlugin {
 		startAutoSave();
 		startOreSpawn();
 
-		getCommand("rt").setExecutor(new CommandInfo(this));
-		getCommand("addTower").setExecutor(new CommandAddTower());
-		getCommand("spawnTower").setExecutor(new CommandSpawnTower());
-		getCommand("listTower").setExecutor(new CommandListTower());
-		getCommand("removeTower").setExecutor(new CommandRemoveTower());
-		getCommand("chunkTower").setExecutor(new CommandChunkTower());
-		getCommand("saveTowerList").setExecutor(new CommandSaveTowerList());
-		getCommand("reloadTowerConfig").setExecutor(new CommandReloadTowerConfig(this, cfg));
+		getCommand("rt").setExecutor(new CommandHelper(this));
 	}
 
 	private void startAutoSave() {
@@ -86,6 +72,11 @@ public class RTMain extends JavaPlugin {
 
 		startAutoSave();
 		startOreSpawn();
+	}
+	
+	public void reloadPlugin() {
+		cfg.reloadConfig();
+		restartScheduler();
 	}
 
 	public void onDisable() {

@@ -21,7 +21,7 @@ import de.prwh.ressourcetowers.main.RTPermissions;
 import de.prwh.ressourcetowers.towers.SerializableLocation;
 import de.prwh.ressourcetowers.towers.TowerInfo;
 import de.prwh.ressourcetowers.towers.TowerInfo.TowerType;
-import de.prwh.ressourcetowers.towers.TowerLocation;
+import de.prwh.ressourcetowers.towers.TowerHelper;
 import net.prosavage.factionsx.core.FPlayer;
 import net.prosavage.factionsx.core.Faction;
 import net.prosavage.factionsx.event.FactionPreClaimEvent;
@@ -34,7 +34,7 @@ import net.prosavage.factionsx.persist.data.FLocation;
 
 public class EventListenerHandler implements Listener {
 
-	TowerLocation tlLoc = TowerLocation.getInstance();
+	TowerHelper tlLoc = TowerHelper.getInstance();
 
 	@EventHandler
 	public void onBlockBreak(BlockBreakEvent event) {
@@ -44,7 +44,7 @@ public class EventListenerHandler implements Listener {
 			FPlayer fPlayer = PlayerManager.INSTANCE.getFPlayer(event.getPlayer());
 			Faction faction_tower = info.getOwnerFaction();
 			Faction faction_none = FactionManager.INSTANCE.getWilderness();
-
+			
 			if (event.getBlock().getLocation().equals(loc.toLocation())) {
 				Chunk chunk = event.getBlock().getChunk();
 				FLocation fLocation = new FLocation(chunk.getX(), chunk.getZ(), chunk.getWorld().getName());
@@ -63,7 +63,7 @@ public class EventListenerHandler implements Listener {
 									ChatColor.RED + "[RessourceTowers]" + ChatColor.WHITE + " Tower has been captured");
 							Bukkit.broadcastMessage(ChatColor.RED + "[RessourceTowers]" + ChatColor.GREEN + " Faction '"
 									+ faction.getTag() + "'" + ChatColor.WHITE + " has captured an "
-									+ TowerLocation.getInstance().getTowerInfo(loc.toLocation()).getTowername());
+									+ TowerHelper.getInstance().getTowerInfo(loc.toLocation()).getTowername());
 						} else {
 							GridManager.INSTANCE.claim(faction, fLocation);
 							info.setOwnerFaction(faction.getTag());
@@ -74,7 +74,7 @@ public class EventListenerHandler implements Listener {
 											+ faction_tower.getTag() + "'");
 							Bukkit.broadcastMessage(ChatColor.RED + "[RessourceTowers]" + ChatColor.GREEN + " Faction '"
 									+ faction.getTag() + "'" + ChatColor.WHITE + " has stolen an "
-									+ TowerLocation.getInstance().getTowerInfo(loc.toLocation()).getTowername()
+									+ TowerHelper.getInstance().getTowerInfo(loc.toLocation()).getTowername()
 									+ " from " + ChatColor.GREEN + "Faction '" + faction_tower.getTag() + "'");
 						}
 					}
