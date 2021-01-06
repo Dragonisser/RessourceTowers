@@ -111,7 +111,7 @@ public class TowerLocation implements Serializable {
 	}
 
 	public void saveTowerList() {
-		RTMain.sendToConsole("Trying to save the tower list");
+		RTMain.sendToConsole("Trying to save the Towerlist");
 
 		try {
 			if (file == null || !file.exists()) {
@@ -122,14 +122,14 @@ public class TowerLocation implements Serializable {
 				RTMain.sendToConsole("Towerlist saved successfully");
 			}
 		} catch (IOException e) {
-			RTMain.getLoggerMain().log(Level.SEVERE, "[RessourceTowers] Could not save towerlist to file", e);
+			RTMain.getLoggerMain().log(Level.SEVERE, "[RessourceTowers] Could not save Towerlist to file", e);
 		}
 
 	}
 
 	@SuppressWarnings("unchecked")
 	public void loadTowerList() {
-		RTMain.sendToConsole("Trying to load the tower list");
+		RTMain.sendToConsole("Trying to load the Towerlist");
 		if (file == null || !file.exists())
 			try {
 				file.createNewFile();
@@ -143,7 +143,7 @@ public class TowerLocation implements Serializable {
 			RTMain.sendToConsole("Towerlist loaded successfully");
 			RTMain.sendToConsole("Loaded " + map.size() + (map.size() == 1 ? " tower" : " towers"));
 		} catch (IOException | ClassNotFoundException | ClassCastException e) {
-			RTMain.getLoggerMain().log(Level.SEVERE, "[RessourceTowers] Could not load towerlist to file", e);
+			RTMain.getLoggerMain().log(Level.SEVERE, "[RessourceTowers] Could not load Towerlist from file", e);
 		}
 	}
 
