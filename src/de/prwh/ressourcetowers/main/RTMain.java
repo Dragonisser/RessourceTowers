@@ -32,7 +32,7 @@ public class RTMain extends JavaPlugin {
 
 		if (getServer().getPluginManager().getPlugin("FactionsX") == null) {
 			getServer().getConsoleSender().sendMessage(ChatColor.RED
-					+ "[RessourceTowers] Plugin FactionsX is Missing. Disabling RessourceTowers!");
+					+ "[RessourceTowers] Plugin FactionsX is Missing!");
 			getServer().getPluginManager().disablePlugin(this);
 			return;
 		}
@@ -96,5 +96,9 @@ public class RTMain extends JavaPlugin {
 
 	public static Logger getLoggerMain() {
 		return log;
+	}
+	
+	public static void sendToConsole(String message) {
+		RTMain.getPlugin(RTMain.class).getServer().getConsoleSender().sendMessage(ChatColor.RED + "[RessourceTowers] " + ChatColor.GREEN + message);
 	}
 }

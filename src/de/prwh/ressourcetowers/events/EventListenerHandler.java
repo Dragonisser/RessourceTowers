@@ -30,8 +30,6 @@ public class EventListenerHandler implements Listener {
 
 	@EventHandler
 	public void onBlockBreak(BlockBreakEvent event) {
-		System.out.println(event.getBlock() + " " + event.getPlayer().getName());
-		//System.out.println(event.getBlock().getBlockData().equals(Bukkit.createBlockData("minecraft:stone_bricks")));
 		
 		for (SerializableLocation loc : tlLoc.getMap().keySet()) {
 			TowerInfo info = tlLoc.getMap().get(loc);
@@ -79,7 +77,6 @@ public class EventListenerHandler implements Listener {
 				event.setCancelled(true);
 			} else if (event.getBlock().getChunk().getX() == loc.toLocation().getChunk().getX()
 					&& event.getBlock().getChunk().getZ() == loc.toLocation().getChunk().getZ()) {
-				// System.out.println("Chunkblock " + loc.toLocation());
 				if (!event.getPlayer().hasPermission(RTPermissions.EditTower.getPermissionName())) {
 					if (fPlayer.hasFaction()) {
 						if (fPlayer.getFaction().equals(faction_tower)) {
@@ -98,8 +95,6 @@ public class EventListenerHandler implements Listener {
 					}
 				}
 
-			} else {
-				// System.out.println("Out of Towerchunk " + loc.toLocation());
 			}
 		}
 	}

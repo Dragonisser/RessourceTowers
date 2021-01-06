@@ -111,7 +111,7 @@ public class TowerLocation implements Serializable {
 	}
 
 	public void saveTowerList() {
-		RTMain.getPlugin(RTMain.class).getServer().getConsoleSender().sendMessage(ChatColor.RED + "[RessourceTowers] " + ChatColor.GREEN + "Trying to save the tower list");
+		RTMain.sendToConsole("Trying to save the tower list");
 
 		try {
 			if (file == null || !file.exists()) {
@@ -119,7 +119,7 @@ public class TowerLocation implements Serializable {
 			}
 			try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))) {
 				oos.writeObject(map);
-				RTMain.getPlugin(RTMain.class).getServer().getConsoleSender().sendMessage(ChatColor.RED + "[RessourceTowers] " + ChatColor.GREEN + "Towerlist saved successfully");
+				RTMain.sendToConsole("Towerlist saved successfully");
 			}
 		} catch (IOException e) {
 			RTMain.getLoggerMain().log(Level.SEVERE, "[RessourceTowers] Could not save towerlist to file", e);
@@ -129,7 +129,7 @@ public class TowerLocation implements Serializable {
 
 	@SuppressWarnings("unchecked")
 	public void loadTowerList() {
-		RTMain.getPlugin(RTMain.class).getServer().getConsoleSender().sendMessage(ChatColor.RED + "[RessourceTowers] " + ChatColor.GREEN + "Trying to load the tower list");
+		RTMain.sendToConsole("Trying to load the tower list");
 		if (file == null || !file.exists())
 			try {
 				file.createNewFile();
@@ -140,9 +140,8 @@ public class TowerLocation implements Serializable {
 
 		try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
 			map = (HashMap<SerializableLocation, TowerInfo>) ois.readObject();
-			String nominator = map.size() == 1 ? " tower" : " towers";
-			RTMain.getPlugin(RTMain.class).getServer().getConsoleSender().sendMessage(ChatColor.RED + "[RessourceTowers] " + ChatColor.GREEN + "Towerlist loaded successfully");
-			RTMain.getPlugin(RTMain.class).getServer().getConsoleSender().sendMessage(ChatColor.RED + "[RessourceTowers] " + ChatColor.GREEN + "Loaded " + map.size() + nominator);
+			RTMain.sendToConsole("Towerlist loaded successfully");
+			RTMain.sendToConsole("Loaded " + map.size() + (map.size() == 1 ? " tower" : " towers"));
 		} catch (IOException | ClassNotFoundException | ClassCastException e) {
 			RTMain.getLoggerMain().log(Level.SEVERE, "[RessourceTowers] Could not load towerlist to file", e);
 		}
@@ -186,7 +185,6 @@ public class TowerLocation implements Serializable {
 					break;
 				}	
 			}
-			System.out.println(loc.getBlock().getBlockData());
 
 			int x = xMin + rand.nextInt(xMax - xMin + 1);
 			int z = zMin + rand.nextInt(zMax - zMin + 1);
