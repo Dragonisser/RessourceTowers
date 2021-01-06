@@ -1,14 +1,19 @@
 package de.prwh.ressourcetowers.events;
 
+import java.util.ArrayList;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
+import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDamageEvent;
+import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -142,6 +147,40 @@ public class EventListenerHandler implements Listener {
 						ChatColor.RED + "[RessourceTowers]" + ChatColor.WHITE + " Chunks with a RessourceTower cant be unclaimed!");
 			}
 		}
+	}
+	
+	@EventHandler
+	public void onBlockBrokenByExplosion(BlockExplodeEvent event) {
+		ArrayList<Block> removeBlock = new ArrayList<>();
+		for(Block block : event.blockList()) {
+			for(SerializableLocation loc : tlLoc.getMap().keySet()) {
+				if(block.getLocation().getChunk().equals(loc.toLocation().getChunk())) {
+					removeBlock.add(block);
+					break;
+				}
+			}
+		}
+		for(Block block : removeBlock) {
+			event.blockList().remove(block);
+		}
+		removeBlock.clear();
+	}
+	
+	@EventHandler
+	public void onEntityxplode(EntityExplodeEvent event) {
+		ArrayList<Block> removeBlock = new ArrayList<>();
+		for(Block block : event.blockList()) {
+			for(SerializableLocation loc : tlLoc.getMap().keySet()) {
+				if(block.getLocation().getChunk().equals(loc.toLocation().getChunk())) {
+					removeBlock.add(block);
+					break;
+				}
+			}
+		}
+		for(Block block : removeBlock) {
+			event.blockList().remove(block);
+		}
+		removeBlock.clear();
 	}
 	
 	private boolean containsTowerType(BlockData blockData) {
