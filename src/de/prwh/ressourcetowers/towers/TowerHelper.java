@@ -32,6 +32,7 @@ public class TowerHelper implements Serializable {
 	private static final long serialVersionUID = 8216077333009256406L;
 	private static File file;
 	private static TowerHelper instance;
+	private static RTMain rtMain;
 	private HashMap<SerializableLocation, TowerInfo> map = new HashMap<>();
 	
 	public static TowerHelper getInstance() {
@@ -268,8 +269,17 @@ public class TowerHelper implements Serializable {
 		Location playerLoc = player.getLocation().add(0, -1, 0).getBlock().getLocation();
 		Location centerTowerLoc = towerLoc.getChunk().getBlock(8, towerLoc.getBlockY(), 8).getLocation();
 		Location centerBlockLoc = playerLoc.getChunk().getBlock(8, playerLoc.getBlockY(), 8).getLocation();
+		rtMain = RTMain.getPlugin(RTMain.class);
 		
-		
+		if(!centered && rtMain.getConfig().getBoolean("secureTowerPlacement")) {
+			int blockX = towerLoc.getBlockX() & 0xF;
+			int blockZ = towerLoc.getBlockZ() & 0xF;
+			
+			if(blockX >= 15 || blockX <= 2 || blockZ >= 15 || blockZ <= 2) {
+				player.sendMessage(ChatColor.RED + "[RessourceTowers]" + ChatColor.WHITE + " Tower to close to chunk edge. Stay at least 2 blocks away or disable 'secureTowerPlacement' in config.");
+				return true;
+			}
+		} 
 		if(!addTower(player, centered ? centerTowerLoc : towerLoc, towertype)) {
 			return false;
 		} else {

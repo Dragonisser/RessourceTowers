@@ -4,6 +4,7 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
@@ -67,9 +68,7 @@ public class RTMain extends JavaPlugin {
 
 		oreSpawn.cancelTasks(this);
 		autoSave.cancelTasks(this);
-
-		cfg.getConfig();
-
+		
 		startAutoSave();
 		startOreSpawn();
 	}
@@ -87,6 +86,10 @@ public class RTMain extends JavaPlugin {
 
 	public static Logger getLoggerMain() {
 		return log;
+	}
+	
+	public FileConfiguration getConfig() {
+		return cfg.getConfig();
 	}
 	
 	public static void sendToConsole(String message) {

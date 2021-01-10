@@ -54,7 +54,7 @@ public class CommandHelper implements CommandExecutor {
 			}
 			if(args.length == 1 && args[0].equalsIgnoreCase("reload")) {
 				main.reloadPlugin();
-				sender.sendMessage("Reload RessourceTowers");
+				sender.sendMessage("Reloading RessourceTowers");
 				return true;
 			}
 		}

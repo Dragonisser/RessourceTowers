@@ -44,6 +44,7 @@ public class CreateConfig {
 		config.addDefault("autoSaveTime", 10);
 		config.addDefault("oreSpawnTime", 5);
 		config.addDefault("hardMode", false);
+		config.addDefault("secureTowerPlacement", true);
 		config.options().copyDefaults(true);
 
 		try {
