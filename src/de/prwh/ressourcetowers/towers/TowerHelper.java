@@ -203,7 +203,7 @@ public class TowerHelper implements Serializable {
 
 			if (!chunkContainsTower(loc.getChunk())) {
 				addTowerLocation(new SerializableLocation(loc),
-						new TowerInfo(type, FactionManager.INSTANCE.getWilderness().getTag()));
+						new TowerInfo(type, FactionManager.INSTANCE.getWilderness().getId()));
 				player.sendMessage(ChatColor.RED + "[RessourceTowers] " + ChatColor.WHITE + type.getTowerName()
 						+ " at x:" + loc.getBlockX() + " y:" + loc.getBlockY() + " z:" + loc.getBlockZ()
 						+ " has been added");

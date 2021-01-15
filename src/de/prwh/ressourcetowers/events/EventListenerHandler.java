@@ -57,7 +57,7 @@ public class EventListenerHandler implements Listener {
 					} else {
 						if (faction_tower.equals(faction_none)) {
 							GridManager.INSTANCE.claim(faction, fLocation);
-							info.setOwnerFaction(faction.getTag());
+							info.setOwnerFaction(faction.getId());
 							tlLoc.updateTowerLocation(loc, info);
 							event.getPlayer().sendMessage(
 									ChatColor.RED + "[RessourceTowers]" + ChatColor.WHITE + " Tower has been captured");
@@ -66,7 +66,7 @@ public class EventListenerHandler implements Listener {
 									+ TowerHelper.getInstance().getTowerInfo(loc.toLocation()).getTowername());
 						} else {
 							GridManager.INSTANCE.claim(faction, fLocation);
-							info.setOwnerFaction(faction.getTag());
+							info.setOwnerFaction(faction.getId());
 							tlLoc.updateTowerLocation(loc, info);
 							event.getPlayer()
 									.sendMessage(ChatColor.RED + "[RessourceTowers]" + ChatColor.WHITE

@@ -32,9 +32,9 @@ public class TowerInfo implements Serializable {
 
 	private static final long serialVersionUID = 2401697897143815705L;
 	private TowerType type;
-	private String ownerFaction;
+	private long ownerFaction;
 
-	public TowerInfo(TowerType type, String faction) {
+	public TowerInfo(TowerType type, long faction) {
 		this.type = type;
 		this.ownerFaction = faction;
 	}
@@ -60,7 +60,7 @@ public class TowerInfo implements Serializable {
 		return FactionManager.INSTANCE.getFaction(ownerFaction);
 	}
 
-	public void setOwnerFaction(String faction) {
+	public void setOwnerFaction(long faction) {
 		this.ownerFaction = faction;
 	}
 }
