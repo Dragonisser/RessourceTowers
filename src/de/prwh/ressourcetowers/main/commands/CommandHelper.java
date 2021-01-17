@@ -1,5 +1,6 @@
 package de.prwh.ressourcetowers.main.commands;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.command.Command;
@@ -10,6 +11,7 @@ import org.bukkit.entity.Player;
 
 import de.prwh.ressourcetowers.main.RTMain;
 import de.prwh.ressourcetowers.towers.TowerHelper;
+import de.prwh.ressourcetowers.towers.TowerInfo.TowerType;
 
 public class CommandHelper implements CommandExecutor, TabCompleter {
 
@@ -67,6 +69,39 @@ public class CommandHelper implements CommandExecutor, TabCompleter {
 
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+		List<String> autoComplete = new ArrayList<String>();
+		
+		if (command.getName().equalsIgnoreCase("rt")) {
+			if(args.length == 1) {
+				autoComplete.clear();
+				autoComplete.add("add");
+				autoComplete.add("remove");
+				autoComplete.add("spawn");
+				autoComplete.add("list");
+				autoComplete.add("reload");
+				
+				return autoComplete;
+			} else if(args.length == 2) {
+				autoComplete.clear();
+				if(args[0].equalsIgnoreCase("add") || args[0].equalsIgnoreCase("spawn")) {
+					for(TowerType type : TowerType.values()) {
+						autoComplete.add(type.getResourceName());
+					}
+					return autoComplete;
+				}
+				if(args[0].equalsIgnoreCase("remove")) {
+					autoComplete.add("all");
+					return autoComplete;
+				}
+			} else if(args.length == 3) {
+				autoComplete.clear();
+				if(args[0].equalsIgnoreCase("spawn")) {
+					autoComplete.add("true");
+					autoComplete.add("false");
+					return autoComplete;
+				}
+			}
+		}
 		return null;
 	}
 

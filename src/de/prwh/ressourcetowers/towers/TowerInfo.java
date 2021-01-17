@@ -13,20 +13,24 @@ public class TowerInfo implements Serializable {
 		EMERALD("Emerald", "minecraft:emerald_ore"), LAPIS("Lapis", "minecraft:lapis_ore"),
 		QUARTZ("Quartz", "minecraft:nether_quartz_ore");
 
-		private String towername;
-		private String ressource;
+		private String resourceName;
+		private String blockData;
 
 		public String getTowerName() {
-			return towername + "-tower";
+			return resourceName + "-tower";
+		}
+		
+		public String getResourceName() {
+			return resourceName;
 		}
 
-		public String getTowerRessource() {
-			return ressource;
+		public String getResourceBlockData() {
+			return blockData;
 		}
 
 		private TowerType(String towername, String ressource) {
-			this.towername = towername;
-			this.ressource = ressource;
+			this.resourceName = towername;
+			this.blockData = ressource;
 		}
 	}
 
@@ -44,7 +48,7 @@ public class TowerInfo implements Serializable {
 	}
 
 	public String getRessource() {
-		return type.getTowerRessource();
+		return type.getResourceBlockData();
 	}
 
 	public String getTowername() {

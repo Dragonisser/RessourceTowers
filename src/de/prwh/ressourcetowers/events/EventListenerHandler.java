@@ -185,7 +185,7 @@ public class EventListenerHandler implements Listener {
 	
 	private boolean containsTowerType(BlockData blockData) {
 		for(TowerType type : TowerType.values()) {
-			if(Bukkit.createBlockData(type.getTowerRessource()).equals(blockData)) {
+			if(Bukkit.createBlockData(type.getResourceBlockData()).equals(blockData)) {
 				return true;
 			}
 		}
